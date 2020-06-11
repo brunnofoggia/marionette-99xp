@@ -1,6 +1,8 @@
 import _ from 'underscore-99xp';
 import front from 'front-99xp';
 
+import uxLoading from 'front-99xp/src/ux/loading';
+
 var obj = {};
 
 obj.removeWrapper = function () {
