@@ -7,7 +7,6 @@ import bbx from 'backbone-99xp';
 import uxLoading from 'front-99xp/src/ux/loading';
 
 import locator from './locator';
-import pretriggers from './pretriggers';
 import render from './render';
 import utils from './utils';
 
