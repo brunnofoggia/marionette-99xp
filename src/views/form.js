@@ -1,7 +1,7 @@
 import _ from 'underscore-99xp';
 import vx from 'front-99xp';
 import bbx from 'backbone-99xp';
-import mnx from '../mnx';
+import mnx from '../marionette';
 
 import Masks from 'front-99xp/src/masks/igorescobar';
 import authUnit from '../views/authUnit';

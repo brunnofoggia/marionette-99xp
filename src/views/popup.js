@@ -1,6 +1,6 @@
 import vx from 'front-99xp';
 import bbx from 'backbone-99xp';
-import mnx from '../mnx';
+import mnx from '../marionette';
 
 import formView from './form';
 import actionBarView from './actionBar';

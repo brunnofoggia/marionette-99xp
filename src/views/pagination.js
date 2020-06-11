@@ -1,6 +1,6 @@
 import vx from 'front-99xp';
 import bbx from 'backbone-99xp';
-import mnx from '../mnx';
+import mnx from '../marionette';
 
 import template from 'marionette-99xp/src/templates/pagination.jst';
 
