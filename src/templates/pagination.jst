@@ -1,0 +1,19 @@
+<form class='col-12 alert alert-primary p-3 mt-3 {{!(options.activated) ? 'd-none' : ''}}' id="{{cid}}">
+    <div class="form-inline justify-content-end">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <button type="button" class="btn btn-default first" {{!options.pagesData.first ? 'disabled="disabled"' : ''}}><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></button>
+            <button type="button" class="btn btn-default prev" {{!options.pagesData.prev ? 'disabled="disabled"' : ''}}><i class="fa fa-chevron-left"></i></button>
+        </div>
+        <select class="custom-select goto col-4 col-lg-auto">
+            {% for (p of options.pagesData.list) { %}
+            <option value="{{p}}" {{options.page === p ? 'selected="selected"' : ''}}>{{p}}</option>
+            {% } %}
+        </select>
+        <div class="input-group-append">
+            <button type="button" class="btn btn-default next" {{!options.pagesData.next ? 'disabled="disabled"' : ''}}><i class="fa fa-chevron-right"></i></button>
+            <button type="button" class="btn btn-default last" {{!options.pagesData.last ? 'disabled="disabled"' : ''}}><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></button>
+        </div>
+    </div>
+    </div>
+</form>

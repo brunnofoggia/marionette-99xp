@@ -1,0 +1,7 @@
+{% for(let x in options.actions) { let action = options.actions[x]; %}
+<{{'navigate' in action ? 'a' : 'button'}} {{'navigate' in action ? 'href="'+action.navigate+'"' : ''}} {{'route' in action ? 'data-route="'+action.route+'"' : ''}} {{'title' in action ? 'title="'+action.title+'"' : ''}} 
+    class="action-{{x}} btn btn-sm {{'btnColor' in action ? (_.indexOf(['default','danger','warning','success','primary','info'],action.btnColor)>-1 ? 'btn-'+action.btnColor : '') : 'btn-light text-dark'}} {{action.btnCss}}" 
+    style="{{'btnColor' in action && _.indexOf(['default','danger','warning','success','primary','info'],action.btnColor)==-1 ? 'background-color: '+action.btnColor+'; border-color: '+action.btnColor+';' : ''}}">
+    {{'beforeText' in action ? action.beforeText : ''}} <i class="{{'ico' in action ? 'fa fa-'+action.ico : ''}} {{action.iCss}}"></i> {{'afterText' in action ? action.afterText : ''}}
+</{{'navigate' in action ? 'a' : 'button'}}>
+{% } %}
