@@ -35,8 +35,12 @@ for(let x in locator['app_prototype']) {
 
 // pretriggers
 mnx.view.prototype.pretriggers = [];
-for(let x in pretriggers['view_prototype']) {
-	mnx.view.prototype[x] = pretriggers['view_prototype'][x];
+mnx.view.prototype.preinitialize = function () {
+    if (this.pretriggers.length > 0) {
+        for (let trigger of this.pretriggers) {
+            _.bind(trigger, this)();
+        }
+    }
 }
 
 // render
