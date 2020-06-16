@@ -95,8 +95,8 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         return this.getRegion('pagination').currentView ? this.getRegion('pagination').currentView.set(this.sortResults(this.getRegion('filter').currentView.filterResults(this.collection))) : this.collection.models;
     },
     sortType: {
-        '#int': (col, options, model) => parseInt(model.get(col.name), 10),
-        '#date': (col, options, model) => parseInt(model.formatItem(col.name, 1).replace(/[^0-9]/g, ''), 10),
+        '#int': (col, options, model) => parseInt((col.val ? col.val(model) : model.get(col.name)), 10),
+        '#date': (col, options, model) => parseInt(vx.format((col.val ? col.val(model) : model.get(col.name)), 'date', 1).replace(/[^0-9]/g, ''), 10),
         '#list': (col, options, model) => col.val(model)
     },
     sortResults(r) {
