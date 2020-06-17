@@ -23,6 +23,7 @@ mnx.behavior = Mn.Behavior.extend();
 mnx.locator = locator;
 for(let x in locator['view']) {
 	mnx.view[x] = locator['view'][x];
+	mnx.cview[x] = locator['view'][x];
 }
 
 for(let x in locator['app']) {
