@@ -61,7 +61,7 @@ export default mnx.view.extend({
         return null;
     },
     search(e) {
-        e && Sk.stopAllEvents(e);
+        e && vx.events.stopAll(e);
         this.trigger('search');
     },
     clear() {

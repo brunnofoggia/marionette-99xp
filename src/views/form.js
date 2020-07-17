@@ -163,7 +163,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         this.addSubmitLoading();
     },
     save(e) {
-        e && Sk.stopAllEvents(e);
+        e && vx.events.stopAll(e);
         var validate = this.model.validate(this.model.attributes, {validateAll: true});
         if (_.size(this.model.errorsMap) > 0 || validate) {
             return this.showErrors(validate, this.model);

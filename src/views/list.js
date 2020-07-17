@@ -36,7 +36,7 @@ export default mnx.view.extend({
         return false;
     },
     orderby(e) {
-        e && Sk.stopAllEvents(e);
+        e && vx.events.stopAll(e);
         
         var $el = $(e.currentTarget), $th = $el.parents('th:first');
         
