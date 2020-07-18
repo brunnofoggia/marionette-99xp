@@ -100,7 +100,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         }
     },
     showRequired($form) {
-        var v = this.model.validations(this.model.attributes);
+        var v = this.model.getMandatoryValidations(this.model.attributes);
         
         if(_.size(v) > 0) {
             var reqFields = _.map(_.keys(v), (i)=>this.getFieldErrorName(i));
@@ -172,18 +172,19 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         this.beforeSave && this.beforeSave(e);
 //        vx.debug.log('save called');
         
-        if(!this._saveEvents) {
-            this._saveEvents = true;
-            this.model.listenTo(this.model, 'sync', () => this.afterSave());
-            this.model.listenTo(this.model, 'error', (model, xhr) => this.syncError(model, xhr));
-        }
+        this.listenPairOnce(
+            [this.model, 'sync', ()=>this.afterSave()],
+            [this.model, 'error', (model, xhr)=>this.syncError(model, xhr)]
+        );
 
         this.model.save();
         this.trigger('saved');
     },
     syncError(model, xhr) {
         this.removeSubmitLoading();
-        
+        this.showSyncError(model, xhr);
+    },
+    showSyncError(model, xhr) {
         var json = {};
         if(xhr.responseJSON) {
            json = xhr.responseJSON; 
