@@ -31,6 +31,9 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         'change .as-field': 'setValue',
         'submit form': 'save',
         'submit': 'save',
+        'click label.auto-for:not([for])': 'setLabelFocus',
+        'focus input': 'setFocusBehavior',
+        'blur input': 'setBlurBehavior',
     },
     onRender() {
         _.bind(mnx.utils.removeWrapper, this)();
@@ -78,16 +81,18 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         
         return this;
     },
+    getElValue($el) {
+        return $el.is('select') ? ($('option:selected', $el)).val() :
+                ($el.is('input:checkbox') || $el.is('input:radio') ? ($el.is(':checked') ? $el.val() : (typeof $el.attr('value0') !== 'undefined' ? $el.attr('value0') : '')) :
+                        ($el.is('.as-field') ? $el.attr('data-field-value') : $el.val()));
+    },
     setValue(e) {
         var el = e.target, $el = $(el), data = {},
             field = $el.is('.as-field') ? $el.attr('data-field-name') : $el.attr('name');
         
         if(!field) return;
 
-        data[field] = $el.is('select') ? ($('option:selected', $el)).val() :
-                ($el.is('input:checkbox') || $el.is('input:radio') ? ($el.is(':checked') ? $el.val() : (typeof $el.attr('value0') !== 'undefined' ? $el.attr('value0') : '')) :
-                        ($el.is('.as-field') ? $el.attr('data-field-value') : $el.val())); //
-
+        data[field] = this.getElValue($el);
         
         var set = this.model.set(data, {validate: !/^__/.test(field) ? true : false});
         this.showRequired(this.$el);
@@ -102,17 +107,18 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
     showRequired($form) {
         var v = this.model.getMandatoryValidations(this.model.attributes);
         
-        if(_.size(v) > 0) {
-            var reqFields = _.map(_.keys(v), (i)=>this.getFieldErrorName(i));
+        // if(_.size(v) > 0) {
+            var reqFields = _.size(v)>0 ? _.map(_.keys(v), (i)=>this.getFieldErrorName(i)) : [];
             $('input[name], select[name], textarea[name], .as-field[data-field-name]', $form).each((x, el) => {
                 var $el = $(el), $p = $el.parents('.form-field:first,.form-group:first').eq(0), $label = $('label:first', $p),
                     name = $el.is('.as-field') ? $el.attr('data-field-name') : $el.attr('name'),
                     reqNameTest = this.getFieldErrorName(name.replace(/\[\d+\]/g, '[]'));
 
-                if(_.indexOf(reqFields, reqNameTest)!==-1) { $label.addClass('required').addClass('font-weight-bold'); $el.attr('is-field-required', '1'); }
-                else { $label.removeClass('required').removeClass('font-weight-bold'); $el.attr('is-field-required', '0'); }
+                $el.val() && this.setLabelFilled($el);
+                if(_.indexOf(reqFields, reqNameTest)!==-1) { $label.addClass('required'); $el.attr('is-field-required', '1'); }
+                else { $label.removeClass('required'); $el.attr('is-field-required', '0'); }
             });
-        }
+        // }
     },
     getFieldErrorName(fieldName) {
         return fieldName.replace(/\[|\]/g, '-').replace(/\-+/g, '-')+'x';
@@ -159,6 +165,44 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
 //    showInfos() {
 //        this.showChildView('infos', new formInfosView({infos: this.infos}));
 //    },
+    setLabelFocus(e) {
+        var el = e.currentTarget, $el = $(el), $container = $el.parents('.field-root:first'), $field;
+        if(!$container) { return; }
+        $field = $(':input:first', $container);
+
+        if($field) {
+            $field.focus();
+        }
+    },
+    eSetLabelFilled(e) {
+        var el = e.currentTarget, $el = $(el);
+        if(this.getElValue($el)) {
+            this.setLabelFilled($el);
+        }
+    },
+    setLabelFilled($el) {
+        var $container = $el.parents('.field-root:first'), $label;
+        if(!$container) { return; }
+        $label = $('label:first', $container);
+
+        $label && $label.addClass('label-filled');
+    },
+    setFocusBehavior(e) {
+        var el = e.currentTarget, $el = $(el), $container = $el.parents('.field-root:first'), $label;
+        if(!$container) { return; }
+        $label = $('label:first', $container);
+
+        $container.addClass('focused');
+        $label && $label.addClass('label-focused');
+    },
+    setBlurBehavior(e) {
+        var el = e.currentTarget, $el = $(el), $container = $el.parents('.field-root:first'), $label;
+        if(!$container) { return; }
+        $label = $('label:first', $container);
+
+        $container.removeClass('focused');
+        $label && $label.removeClass('label-focused');
+    },
     beforeSave() {
         this.addSubmitLoading();
     },
