@@ -174,6 +174,12 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
             $field.focus();
         }
     },
+    setLabelsFilled($form) {
+        $('input[name], select[name], textarea[name], .as-field[data-field-name]', $form).each((x, el) => {
+            var $el = $(el);
+            $el.val() && this.setLabelFilled($el);
+        });
+    },
     eSetLabelFilled(e) {
         var el = e.currentTarget, $el = $(el);
         if(this.getElValue($el)) {
