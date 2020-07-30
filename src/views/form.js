@@ -112,10 +112,10 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
             $('input[name], select[name], textarea[name], .as-field[data-field-name]', $form).each((x, el) => {
                 var $el = $(el), $p = $el.parents('.form-field:first,.form-group:first').eq(0), $label = $('label:first', $p),
                     name = $el.is('.as-field') ? $el.attr('data-field-name') : $el.attr('name'),
-                    reqNameTest = this.getFieldErrorName(name.replace(/\[\d+\]/g, '[]'));
+                    reqNameTest = [this.getFieldErrorName(name), this.getFieldErrorName(name.replace(/\[\d+\]/g, '[]'))];
 
                 $el.val() && this.setLabelFilled($el);
-                if(_.indexOf(reqFields, reqNameTest)!==-1) { $label.addClass('required'); $el.attr('is-field-required', '1'); }
+                if(_.intersection(reqFields, reqNameTest).length>0) { $label.addClass('required'); $el.attr('is-field-required', '1'); }
                 else { $label.removeClass('required'); $el.attr('is-field-required', '0'); }
             });
         // }
