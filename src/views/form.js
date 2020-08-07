@@ -34,6 +34,8 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         'click label.auto-for:not([for])': 'setLabelFocus',
         'focus input': 'setFocusBehavior',
         'blur input': 'setBlurBehavior',
+        /* utils */
+        'click .show-info-html': 'showInfoHtml',
     },
     onRender() {
         _.bind(mnx.utils.removeWrapper, this)();
@@ -328,5 +330,13 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
                 }
             }
         });
+    },
+    showInfoHtml(e) {
+        var $el = $(e.currentTarget),
+            $container = $($el.attr('data-info-container'), this.$el),
+            $modal = Sk.popup.simple.info({title: $el.attr('data-info-title') || 'Informação'});
+
+        $('.modal-body', $modal).append($container.clone().show());
+        return $modal;
     },
 }, _.clone(mnx.utils.viewLoading)));
