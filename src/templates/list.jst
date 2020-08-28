@@ -17,7 +17,7 @@
         {% var r = options.get().results(); %}
         {% if (_.size(r) > 0) { %}
             {% for(let x in r) { let model = r[x]; %}
-            <tr class="item" data-id="{{model.cid}}">
+            <tr class="item" data-cid="{{model.cid}}" data-id="{{model.id}}">
                 {% for(let y in options.cols) { let col = options.cols[y]; var text = ''; %}
                 {% //text = 'val' in col ? col.val(model) : model.get(col.name); %}
                 {% if(!('val' in col)) { text = model.get(col.name); } else { try { text = col.val(model); }catch(e){ text = '-'; } } %}
