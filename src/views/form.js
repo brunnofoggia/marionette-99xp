@@ -128,19 +128,25 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
     showErrors(errors) {
         if (!errors)
             return false;
+        
+        var fieldErrorLength = {};
+
         for (let error of errors) {
             var fieldName = error[0];
             // index of list
             if(error[2]) {
                 fieldName = fieldName.replace(/\[\]/, '['+error[2]+']');
             }
+            !(fieldName in fieldErrorLength) && (fieldErrorLength[fieldName] = 0);
+            fieldErrorLength[fieldName]++;
+            if(fieldErrorLength[fieldName]>1) continue;
 
             var fieldErrorName = this.getFieldErrorName(fieldName);
 
-            this.clearError(fieldErrorName);
             var field = $('[name="' + fieldName + '"],.as-field[data-field-name="' + fieldName + '"]');
             
             if(field.length) {
+                this.clearError(fieldErrorName);
                 field
                     .attr('data-toggle', 'popover').attr('data-container', 'form#' + this.cid)
                     .attr('data-placement', 'bottom').attr('data-html', true)
