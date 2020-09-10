@@ -76,25 +76,43 @@ obj.viewActions = {
 // loading
 
 obj.viewLoading = Object.freeze({
+    _loadingIds: {},
+    _loadingExecution: {},
     _isSubmitting: false,
     _loadingText: ' ',
     isSubmitting() {
         return !!this._isSubmitting;
     },
-    addSubmitLoading(text) {
-//        if($(':submit', this.$el).length && $(':submit', this.$el).attr('data-loading') && this.isSubmitting()===false) {
-//            !$(':submit', this.$el).attr('data-text') && $(':submit', this.$el).attr('data-text', $(':submit', this.$el).html());
-        if(this.isSubmitting()===false) {
-            this._loadIdSubmitting = uxLoading.add(text || this._loadingText);
-            this._isSubmitting = true;
+    isLoadingExecuting(uniqId) {
+        return !!this._loadingExecution[uniqId];
+    },
+    addLoading(text, uniqId) {
+        if(this.isLoadingExecuting(uniqId)===false) {
+            this._loadingIds[uniqId] = uxLoading.add(text || this._loadingText);
+            this._loadingExecution[uniqId] = true;
         }
     },
-    removeSubmitLoading() {
-//        $(':submit', this.$el).length && $(':submit', this.$el).attr('data-loading') && $(':submit', this.$el).html($(':submit', this.$el).attr('data-text'));
-        if(this.isSubmitting()===true) {
-            uxLoading.remove(this._loadIdSubmitting);
-            this._isSubmitting = false;
+    removeLoading(uniqId, timeout=0) {
+        if(this.isLoadingExecuting(uniqId)===true) {
+            setTimeout(()=>{
+                uxLoading.remove(this._loadingIds[uniqId]);
+                this._loadingExecution[uniqId] = false;
+            }, timeout);
         }
+    },
+    addSubmitLoading(text) {
+        this.addLoading(text, 'submit');
+        // if(this.isSubmitting()===false) {
+        //     this._loadIdSubmitting = uxLoading.add(text || this._loadingText);
+        //     this._isSubmitting = true;
+        // }
+    },
+    removeSubmitLoading() {
+        this.removeLoading('submit', 400);
+        // if(this.isSubmitting()===true) {
+        //     uxLoading.remove(this._loadIdSubmitting);
+        //     this._isSubmitting = false;
+        // }
     },
 });
 
