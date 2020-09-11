@@ -155,7 +155,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
     //            $('.form-error-'+error[0]).parents('.popover:first').addClass('danger');
                 $('[class*="form-error-' + fieldErrorName + '"]').parents('.popover:first').addClass('danger');
             } else {
-                App.ux.toast({msg: error[1] + ' ('+fieldName+')', color: 'danger text-dark font-weight-bold'});
+                App.ux.toast.add({msg: error[1] + ' ('+fieldName+')', color: 'danger text-dark font-weight-bold'});
             }
         }
 
@@ -259,7 +259,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         else if('authorization' in json && json.authorization)
             msg = 'Acesso negado';
         
-        App.ux.toast({msg: msg, color: 'danger text-dark font-weight-bold'});
+        App.ux.toast.add({msg: msg, color: 'danger text-dark font-weight-bold'});
     },
     afterSave() {
         this.removeSubmitLoading();
@@ -270,7 +270,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         this.goback();
     },
     goback(saved) {
-        saved && App.ux.toast({msg: 'Registro #'+this.model.id+' salvo com sucesso', color: 'info text-dark'});
+        saved && App.ux.toast.add({msg: 'Registro #'+this.model.id+' salvo com sucesso', color: 'info text-dark'});
         
         if('gobackUrl' in this) {
             var url = this.gobackUrl;

@@ -129,7 +129,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
                 if (status) {
                     this.listenToOnce(selectedModel, 'sync', () => {
                         this.collection.fetch({reset: true});
-                        App.ux.toast({msg: `Registro #${id} removido`, color: 'danger text-danger'});
+                        App.ux.toast.add({msg: `Registro #${id} removido`, color: 'danger text-danger'});
                     });
                     selectedModel.destroy();
                 }
