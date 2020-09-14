@@ -345,4 +345,4 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         $('.modal-body', $modal).append($container.clone().show());
         return $modal;
     },
-}, _.clone(mnx.utils.viewLoading)));
+}));

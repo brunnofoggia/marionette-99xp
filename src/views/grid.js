@@ -159,4 +159,4 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         this.collection = new this.collection.constructor;
         this.initialize();
     }
-}, _.clone(mnx.utils.viewLoading)));
+}));
