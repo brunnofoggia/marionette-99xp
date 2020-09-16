@@ -12,9 +12,9 @@ import utils from './utils';
 
 var mnx = {};
 
-mnx.view = Mn.View.extend(_.extend({},_.clone(utils.viewLoading)));
-mnx.cview = Mn.CollectionView.extend(_.extend({},_.clone(utils.viewLoading)));
-mnx.app = Mn.Application.extend(_.extend({},_.clone(utils.viewLoading)));
+mnx.view = Mn.View.extend(_.extend({},_.clone(utils.viewLoading), _.clone(utils.viewScroll)));
+mnx.cview = Mn.CollectionView.extend(_.extend({},_.clone(utils.viewLoading), _.clone(utils.viewScroll)));
+mnx.app = Mn.Application.extend(_.extend({},_.clone(utils.viewLoading), _.clone(utils.viewScroll)));
 mnx.region = Mn.Region.extend();
 mnx.behavior = Mn.Behavior.extend();
 

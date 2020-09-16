@@ -116,5 +116,25 @@ obj.viewLoading = Object.freeze({
     },
 });
 
+obj.viewScroll = Object.freeze({
+    getHeaderHeight() {
+        return $('header').height();
+    },
+    getScrollTopOffset() {
+        return this.$el.offset()['top'];
+    },
+    afterScrollTop() {
+    },
+    scrollTop() {
+        var body = $('html, body');
+        body.stop().animate(
+            { scrollTop: this.getScrollTopOffset() - this.getHeaderHeight() },
+            500,
+            'swing',
+            _.bind(this.afterScrollTop, this)
+        );
+    },
+});
+
 
 export default obj;
