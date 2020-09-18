@@ -1,8 +1,6 @@
 import vx from 'front-99xp';
-import bbx from 'backbone-99xp';
-import mnx from '../marionette';
 
-import authAccess from 'backbone-99xp/src/collections/authAccess';
+import authAccess from 'backbone-front-99xp/src/collections/authAccess';
 
 var _ = vx._;
 

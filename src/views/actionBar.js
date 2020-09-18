@@ -1,5 +1,4 @@
 import vx from 'front-99xp';
-import bbx from 'backbone-99xp';
 import mnx from '../marionette';
 
 var _ = vx._;

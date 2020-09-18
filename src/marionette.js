@@ -1,10 +1,6 @@
-import Bb from 'backbone';
 import Mn from 'backbone.marionette';
-import vx from 'front-99xp';
 import _ from 'underscore-99xp';
-import bbx from 'backbone-99xp';
-
-import uxLoading from 'front-99xp/src/ux/loading';
+import bbxf from 'backbone-front-99xp';
 
 import locator from './locator';
 import render from './render';
@@ -51,28 +47,28 @@ for(let x in render['view_prototype']) {
 
 
 // security
-mnx.view.Shield = mnx.cview.Shield = bbx.view.Shield;
+mnx.view.Shield = mnx.cview.Shield = bbxf.view.Shield;
 
 // state
-mnx.view.prototype.getRelatedList = bbx.view.prototype.getRelatedList;
-mnx.view.prototype.pretriggers.push(bbx.view.pretrigger_initialState);
+mnx.view.prototype.getRelatedList = bbxf.view.prototype.getRelatedList;
+mnx.view.prototype.pretriggers.push(bbxf.view.pretrigger_initialState);
 
 
-mnx.view.prototype.pretriggers.push(bbx.view.pretrigger_collectionInstantiate);
+mnx.view.prototype.pretriggers.push(bbxf.view.pretrigger_collectionInstantiate);
 
-mnx.view.prototype.isAllRelatedReady = bbx.view.prototype.isAllRelatedReady;
+mnx.view.prototype.isAllRelatedReady = bbxf.view.prototype.isAllRelatedReady;
 
-mnx.view.prototype.triggerReady = bbx.view.prototype.triggerReady;
+mnx.view.prototype.triggerReady = bbxf.view.prototype.triggerReady;
 
-mnx.view.prototype.addRelatedList = bbx.view.prototype.addRelatedList;
+mnx.view.prototype.addRelatedList = bbxf.view.prototype.addRelatedList;
 
-mnx.view.prototype.storeRelatedList = bbx.view.prototype.storeRelatedList;
+mnx.view.prototype.storeRelatedList = bbxf.view.prototype.storeRelatedList;
 
-mnx.view.prototype._fetchRelatedFirst = bbx.view.prototype._fetchRelatedFirst;
-mnx.view.prototype.fetchAndStateRelatedList = bbx.view.prototype.fetchAndStateRelatedList;
+mnx.view.prototype._fetchRelatedFirst = bbxf.view.prototype._fetchRelatedFirst;
+mnx.view.prototype.fetchAndStateRelatedList = bbxf.view.prototype.fetchAndStateRelatedList;
 
-mnx.view.prototype.fetchRelatedLists = bbx.view.prototype.fetchRelatedLists;
-mnx.view.prototype.listenPairOnce = bbx.view.prototype.listenPairOnce;
+mnx.view.prototype.fetchRelatedLists = bbxf.view.prototype.fetchRelatedLists;
+mnx.view.prototype.listenToOnce = bbxf.view.prototype.listenToOnce;
 
 // utils
 mnx.utils = utils;

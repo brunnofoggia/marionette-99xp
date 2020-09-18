@@ -1,16 +1,12 @@
 import vx from 'front-99xp';
-import bbx from 'backbone-99xp';
-import mnx from '../marionette';
 
-import popupView from './popupView';
-import actionBarView from './actionBar';
-import 'jquery-mask-plugin';
-import Masks from '../../masks/igorescobar';
+import popup from './popupView';
+import actionBar from './actionBar';
 
 var _ = vx._;
 
 
-export default popupView.extend({
+export default popup.extend({
     events: {
         'change input': 'setValue',
         'change select': 'setValue',
@@ -38,7 +34,7 @@ export default popupView.extend({
         
         
         this.renderBody();
-        this.showChildView('footer', new actionBarView());
+        this.showChildView('footer', new actionBar());
         
         this.setActions();
         

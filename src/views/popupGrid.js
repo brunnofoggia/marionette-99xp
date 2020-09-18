@@ -1,24 +1,16 @@
 import vx from 'front-99xp';
-import bbx from 'backbone-99xp';
 import mnx from '../marionette';
 
 import template from '../templates/grid.jst';
-import legendTemplate from '../templates/legend.jst';
-import filterView from './filter';
-import listView from './list';
-import paginationView from './pagination';
-import authUnit from './authUnit';
-import gridView from './grid';
+import grid from './grid';
 
-import popupView from './popupView';
-import actionBarView from './actionBar';
+import popup from './popupView';
 import 'jquery-mask-plugin';
-import Masks from '../../masks/igorescobar';
 
 var _ = vx._;
 
 
-export default popupView.extend({
+export default popup.extend({
     templateBody: template,
     regions: {
         'header': '.modal-header',
@@ -30,15 +22,15 @@ export default popupView.extend({
         legend: '.legend',
     },
     isReady: mnx.utils.isReady,
-    provideResults: gridView.prototype.provideResults,
-    sortResults: gridView.prototype.sortResults,
-    sortType: gridView.prototype.sortType,
+    provideResults: grid.prototype.provideResults,
+    sortResults: grid.prototype.sortResults,
+    sortType: grid.prototype.sortType,
     showActions(actions) {
         this.getRegion('footer').currentView.setActions(actions, this);
     },
     initialize() {
-        _.bind(popupView.prototype.initialize, this)();
-        _.bind(gridView.prototype.initialize, this)();
+        _.bind(popup.prototype.initialize, this)();
+        _.bind(grid.prototype.initialize, this)();
     },
     renderBody() {
         $('*', this.getRegion('body').$el).remove();

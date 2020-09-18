@@ -1,10 +1,9 @@
 import _ from 'underscore-99xp';
 import vx from 'front-99xp';
-import bbx from 'backbone-99xp';
+import bbxf from 'backbone-front-99xp';
 import mnx from '../marionette';
 
 import Masks from 'front-99xp/src/masks/igorescobar';
-import authUnit from '../views/authUnit';
 
 var App = vx.locator.getItem('iApp');
 
@@ -282,7 +281,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
             }
         }
         
-        !('gobackUrl' in this) ? Backbone.history.history.back() : bbx.router.navigate(url, {trigger: true});
+        !('gobackUrl' in this) ? Backbone.history.history.back() : bbxf.router.navigate(url, {trigger: true});
     },
     getDefaultActions() {
         return [

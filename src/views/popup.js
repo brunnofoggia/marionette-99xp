@@ -1,14 +1,13 @@
 import vx from 'front-99xp';
-import bbx from 'backbone-99xp';
 import mnx from '../marionette';
 
-import formView from './form';
-import actionBarView from './actionBar';
+import form from './form';
+import actionBar from './actionBar';
 
 var _ = vx._;
 
 
-export default formView.extend({
+export default form.extend({
     template: false,
     el: function() { return this.setModal() },
     popupSize: 'unset',
@@ -31,7 +30,7 @@ export default formView.extend({
         
         
         this.renderBody();
-        this.showChildView('footer', new actionBarView());
+        this.showChildView('footer', new actionBar());
         
         this.setActions();
         

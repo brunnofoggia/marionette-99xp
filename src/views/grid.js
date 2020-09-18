@@ -1,5 +1,5 @@
 import vx from 'front-99xp';
-import bbx from 'backbone-99xp';
+import bbxf from 'backbone-front-99xp';
 import mnx from '../marionette';
 
 import template from 'marionette-99xp/src/templates/grid.jst';
@@ -146,7 +146,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         var selectedModel = this.collection.find((model) => model.cid == selectedRow),
                 route = $(e.currentTarget).attr('data-route').replace(/\/pk$/, '/' + selectedModel.id);
 
-        bbx.router.navigate(route, {trigger: true});
+        bbxf.router.navigate(route, {trigger: true});
     },
     getDefaultActions() {
         return [
