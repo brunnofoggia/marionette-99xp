@@ -229,7 +229,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         this.beforeSave && this.beforeSave(e);
 //        vx.debug.log('save called');
         
-        this.listenPairOnce(
+        this.listenToOnce(
             [this.model, 'sync', ()=>this.afterSave()],
             [this.model, 'error', (model, xhr)=>this.syncError(model, xhr)]
         );
