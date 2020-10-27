@@ -31,8 +31,8 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         'submit form': 'save',
         'submit': 'save',
         'click label.auto-for:not([for])': 'setLabelFocus',
-        'focus input,select': 'setFocusBehavior',
-        'blur input,select': 'setBlurBehavior',
+        'focus input,select,textarea': 'setFocusBehavior',
+        'blur input,select,textarea': 'setBlurBehavior',
         /* utils */
         'click .show-info-html': 'showInfoHtml',
     },
