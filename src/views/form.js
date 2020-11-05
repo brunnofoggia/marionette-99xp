@@ -90,7 +90,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
                         ($el.is('.as-field') ? $el.attr('data-field-value') : $el.val()));
     },
     setValue(e) {
-        var el = e.target, $el = $(el), data = {},
+        var el = e.target || e.currentTarget, $el = $(el), data = {},
             field = $el.is('.as-field') ? $el.attr('data-field-name') : $el.attr('name');
         
         if(!field) return;
