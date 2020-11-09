@@ -17,10 +17,13 @@ obj.view_prototype.renderSync = function () {
 //        this._firstRender = false;
 //        return;
 //    }
+
+    this.addLoading && this.addLoading('', 'renderSync');
     var isReady = _.bind((this.isReady ? this.isReady : utils.isReady), this);
 
     clearTimeout(this.renderTimer); this.renderTimer=null;
     if (isReady()) {
+        this.removeLoading && this.removeLoading('renderSync', 0);
         this.renderStatus = true;
         // _.bind(obj.view_prototype._render, this)();
         this._render();
