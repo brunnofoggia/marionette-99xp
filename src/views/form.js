@@ -222,11 +222,18 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
     beforeSave() {
         this.addSubmitLoading();
     },
-    save(e) {
-        e && vx.events.stopAll(e);
+    saveValidation() {
         var validate = this.model.validate(this.model.attributes, {validateAll: true});
         if (_.size(this.model.errorsMap) > 0 || validate) {
-            return this.showErrors(validate, this.model);
+            this.showErrors(validate, this.model);
+            return false;
+        }
+        return true;
+    },
+    save(e) {
+        e && vx.events.stopAll(e);
+        if(!this.saveValidation()) {
+            return;
         }
         
         this.beforeSave && this.beforeSave(e);
