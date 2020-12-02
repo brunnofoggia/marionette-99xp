@@ -3,9 +3,9 @@
         <tr>
             {% for (let y in options.cols) { let col = options.cols[y]; %}
             <th class="text-{{'align' in col ? col.align : 'left'}}" data-name="{{col.name}}">
-                {% if(options.get().sort!==false) { %}<a href="#" class="orderby">{% } %}
+                {% if(options.get().sort!==false && col.sort !== false) { %}<a href="#" class="orderby">{% } %}
                     {{col.title}}
-                {% if(options.get().sort!==false) { %}</a>{% } %}
+                {% if(options.get().sort!==false && col.sort !== false) { %}</a>{% } %}
                 {% if(options.get().sort[0] === col.name) { %}
                 <i class="fa fa-chevron-{{options.get().sort[1]==='asc' ? 'down' : 'up'}}"></i>
                 {% } %}
