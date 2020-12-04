@@ -2,6 +2,7 @@ import vx from 'front-99xp';
 import bbxf from 'backbone-front-99xp';
 import mnx from '../marionette';
 
+import autoUtilEvents from './autoUtilEvents';
 import template from 'marionette-99xp/src/templates/grid.jst';
 import legendTemplate from 'marionette-99xp/src/templates/legend.jst';
 import filterView from './filter';
@@ -12,13 +13,15 @@ import authUnit from './authUnit';
 var _ = vx._;
 var App = vx.locator.getItem('iApp');
 
-export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
+export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(autoUtilEvents), {
     template: template,
     regions: {
         filter: '.filter',
         list: '.list',
         pagination: '.pagination',
         legend: '.legend',
+    },
+    events: {
     },
     isReady: mnx.utils.isReady,
 //    initialRenderOnState: 'ready',
@@ -29,6 +32,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         vx.utils.when(()=>this.isReady(), ()=>this.setActions());
     },
     initialize() {
+        this.events = _.extend(_.clone(autoUtilEvents.events), this.events);
         this.setGrid();
         vx.debug.globalify('currentView', this);
         vx.debug.globalify('currentCollection', this.collection);

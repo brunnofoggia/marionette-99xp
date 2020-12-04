@@ -2,12 +2,13 @@ import _ from 'underscore-99xp';
 import vx from 'front-99xp';
 import bbxf from 'backbone-front-99xp';
 import mnx from '../marionette';
+import autoUtilEvents from './autoUtilEvents';
 
 import Masks from 'front-99xp/src/masks/igorescobar';
 
 var App;
 
-export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
+export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(autoUtilEvents), {
     regions: {
         infos: '.infos'
     },
@@ -33,10 +34,6 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
         'click label.auto-for:not([for])': 'setLabelFocus',
         'focus input,select,textarea': 'setFocusBehavior',
         'blur input,select,textarea': 'setBlurBehavior',
-        /* utils */
-        'click .show-info-msg': 'showInfoMsg',
-        'click .show-info-html': 'showInfoHtml',
-        'click .show-popover-msg': 'showPopoverMsg',
     },
     onRender() {
         _.bind(mnx.utils.removeWrapper, this)();
@@ -55,6 +52,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
     initialize() {
         vx.debug.globalify('currentView', this);
         vx.debug.globalify('currentModel', this.model);
+        this.events = _.extend(_.clone(autoUtilEvents.events), this.events);
         this.validateOnSet = false;
         this.model.errorsMap = {};
         if (this.options.id) {
@@ -347,38 +345,5 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), {
                 }
             }
         });
-    },
-    showInfoHtml(e, stopAll=true) {
-        stopAll && e && vx.events.stopAll(e);
-        var $el = $(e.currentTarget),
-            $container = $($el.attr('data-info-container'), this.$el),
-            $modal = Sk.popup.simple.info({title: $el.attr('data-info-title') || 'Informação'});
-
-        $('.modal-body', $modal).append($container.clone().show());
-        return $modal;
-    },
-    showInfoMsg(e, stopAll=true) {
-        stopAll && e && vx.events.stopAll(e);
-        var $el = $(e.currentTarget),
-            $modal = Sk.popup.simple.info({title: $el.attr('data-info-title') || 'Informação', msg: $el.attr('data-info-msg')});
-
-        return $modal;
-    },
-    showPopoverMsg(e, stopAll=true) {
-        stopAll && e && vx.events.stopAll(e);
-        const $el = $(e.currentTarget);
-        const id = _.uniqueId('popover-');
-        $el
-            .attr('data-toggle', 'popover').attr('data-container', 'form#' + this.cid)
-            .attr('data-placement', 'bottom').attr('data-html', true)
-            .attr('data-content', '<span class="popover-text '+id+'">'+$el.attr('data-popover-text')+'</span>')
-            .attr('data-trigger', 'manual').popover('show');
-        var $pop = $('.popover-text.'+id).parents('.popover:first').attr('id', id);
-
-        $el.attr('data-popover-timeout')!=='0' && setTimeout(()=>{
-            $pop.popover('hide');
-        }, $el.attr('data-popover-timeout') || 1500);
-
-        return $el;
     }
 }));
