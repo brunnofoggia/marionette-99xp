@@ -11,7 +11,8 @@ export default {
     showInfoHtml(e, stopAll=true) {
         stopAll && e && vx.events.stopAll(e);
         var $el = $(e.currentTarget),
-            $container = $($el.attr('data-info-container'), this.$el),
+            $container = $($el.attr('data-info-container'), $el).length ? $($el.attr('data-info-container'), $el)
+            : $($el.attr('data-info-container'), this.$el),
             $modal = Sk.popup.simple.info({title: $el.attr('data-info-title') || 'Informação'});
 
         $('.modal-body', $modal).append($container.clone().show());
