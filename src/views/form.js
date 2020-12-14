@@ -145,6 +145,9 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
             var field = $('[name="' + fieldName + '"],.as-field[data-field-name="' + fieldName + '"]');
             
             if(field.length) {
+                if(this.isThereAnExistingError(fieldErrorName)) {
+                    continue;
+                }
                 this.clearError(fieldErrorName);
                 field
                     .attr('data-toggle', 'popover').attr('data-container', 'form#' + this.cid)
@@ -165,6 +168,9 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
     removeError(field) {
         delete this.model.errorsMap[field];
         this.clearError(field);
+    },
+    isThereAnExistingError(fieldErrorName) {
+        return $('[class*="form-error-' + fieldErrorName + '"]').length > 0;
     },
     clearError(field) {
         $('[name="' + field + '"],.as-field[data-field-name="' + field + '"]').length > 0 && 
