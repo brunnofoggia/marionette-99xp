@@ -2,13 +2,11 @@ import _ from 'underscore-99xp';
 import vx from 'front-99xp';
 import bbxf from 'backbone-front-99xp';
 import mnx from '../marionette';
-import autoUtilEvents from './autoUtilEvents';
-
-import Masks from 'front-99xp/src/masks/igorescobar';
+import sync from './sync';
 
 var App;
 
-export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(autoUtilEvents), {
+export default sync.extend({
     regions: {
         infos: '.infos'
     },
@@ -17,11 +15,6 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
         warning: [],
         danger: [],
     },
-    initialRenderOnState: 'ready',
-    renderOnState: 'ready',
-    isReady: mnx.utils.isReady,
-    render: mnx.view.prototype.renderSync,
-    masks: Masks,
     gobackUrl: '../lista',
     _saveEvents: false,
     events: {
@@ -35,52 +28,9 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
         'focus input,select,textarea': 'setFocusBehavior',
         'blur input,select,textarea': 'setBlurBehavior',
     },
-    onRender() {
-        _.bind(mnx.utils.removeWrapper, this)();
-        
-        if(!this.isReady()) return;
-        this.applyFormBehaviors(this.$el);
-
-        this.isReady() && this.setActions();
-        this.isReady() && this.afterRender && this.afterRender();
-    },
-    applyFormBehaviors($el) {
+    applyBehaviors($el) {
         this.showRequired($el);
-        Sk.waitFor(()=>$.fn.tooltip, ()=>$('[data-toggle="tooltip"]', $el).tooltip());
-        this.masks.apply($el);
-    },
-    initialize() {
-        vx.debug.globalify('currentView', this);
-        vx.debug.globalify('currentModel', this.model);
-        this.events = _.extend(_.clone(autoUtilEvents.events), this.events);
-        this.validateOnSet = false;
-        this.model.errorsMap = {};
-        if (this.options.id) {
-            if (this.model.morphState === this.renderOnState)
-                this.render();
-            else {
-//                this.listenToOnce(this.model, this.renderOnState, () => { this.render(); });
-                this.listenTo(this.model, this.renderOnState, () => { this.render(); });
-            }
-            this.model.fetch();
-        } else {
-            if (this.model.morphState === this.initialRenderOnState) {
-                this.render();
-            } else {
-                this.listenToOnce(this.model, this.initialRenderOnState, () => { this.render(); });
-            }
-        }
-
-        this.model.listenTo(this.model, 'removeError', (field) => this.removeError(field));
-        
-        // event added to render after loading auth access
-        this.on('ready', () => this.render());
-        ('addAuthAccessRelated' in this) && this.addAuthAccessRelated();
-        if(!this.fetchRelatedLists() && this.isReady()) {
-            this.render();
-        }
-        
-        return this;
+        sync.prototype.applyBehaviors.apply(this, arguments);
     },
     getElValue($el) {
         return $el.is('select') ? ($('option:selected', $el)).val() :
@@ -251,30 +201,6 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
         this.model.save();
         this.trigger('saved');
     },
-    syncError(model, xhr) {
-        this.removeSubmitLoading();
-        this.showSyncError(model, xhr);
-    },
-    showSyncError(model, xhr) {
-        var json = {};
-        if(xhr.responseJSON) {
-           json = xhr.responseJSON; 
-        } else {
-            try {
-                json = JSON.parse(xhr.responseText);
-            } catch(e) {}
-        }
-        
-        var msg = 'Falha interna ao tentar salvar o registro';
-        if(json && (json['errorMessage'] || json['message'])) {
-            msg = json['errorMessage'] || json['message'];
-        }
-        else if('authorization' in json && json.authorization)
-            msg = 'Acesso negado';
-        
-        App = vx.locator.getItem('iApp');
-        App.ux.toast.add({msg: msg, color: 'danger text-dark font-weight-bold'});
-    },
     afterSave() {
         this.removeSubmitLoading();
 //        vx.debug.log('is prod ? '+ISPROD);
@@ -352,4 +278,4 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
             }
         });
     }
-}));
+});

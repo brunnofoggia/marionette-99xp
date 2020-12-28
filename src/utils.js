@@ -19,7 +19,7 @@ obj.removeWrapper = function () {
 }
 
 obj.isReady = function () {
-    if ((!this.model || this.model.isReady()) && (!this.collection || this.collection.isReady()) && (!('isAllRelatedReady' in this) || this.isAllRelatedReady())) {
+    if (typeof this.template === 'function' && (!this.model || this.model.isReady()) && (!this.collection || this.collection.isReady()) && (!('isAllRelatedReady' in this) || this.isAllRelatedReady())) {
         return true;
     }
     return false;
