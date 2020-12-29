@@ -1,10 +1,7 @@
-import vx from 'front-99xp';
-import mnx from '../marionette';
+import _ from 'underscore-99xp';
 
 import form from './form';
 import actionBar from './actionBar';
-
-var _ = vx._;
 
 
 export default form.extend({

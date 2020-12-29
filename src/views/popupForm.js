@@ -1,9 +1,7 @@
-import vx from 'front-99xp';
+import _ from 'underscore-99xp';
 
-import popup from './popupView';
+import popup from './popup';
 import actionBar from './actionBar';
-
-var _ = vx._;
 
 
 export default popup.extend({

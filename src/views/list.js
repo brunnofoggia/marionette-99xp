@@ -1,6 +1,6 @@
 import _ from 'underscore-99xp';
-import vx from 'front-99xp';
-import mnx from '../marionette';
+import vx from 'backbone-front-99xp';
+import mnx from '../define';
 
 import template from 'marionette-99xp/src/templates/list.jst';
 

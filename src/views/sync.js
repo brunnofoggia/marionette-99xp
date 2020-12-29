@@ -1,8 +1,7 @@
 import _ from 'underscore-99xp';
-import vx from 'front-99xp';
-import bbxf from 'backbone-front-99xp';
+import vx from 'backbone-front-99xp';
 import Masks from 'front-99xp/src/masks/igorescobar';
-import mnx from '../marionette';
+import mnx from '../define';
 import autoUtilEvents from './autoUtilEvents';
 
 export default mnx.view.extend(_.extend({}, _.clone(mnx.utils.viewActions), _.clone(autoUtilEvents), {

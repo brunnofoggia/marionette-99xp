@@ -1,13 +1,11 @@
-import vx from 'front-99xp';
-import mnx from '../marionette';
+import _ from 'underscore-99xp';
+import mnx from '../define';
 
 import template from '../templates/grid.jst';
 import grid from './grid';
 
-import popup from './popupView';
+import popup from './popup';
 import 'jquery-mask-plugin';
-
-var _ = vx._;
 
 
 export default popup.extend({

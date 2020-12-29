@@ -1,7 +1,5 @@
 import _ from 'underscore-99xp';
-import vx from 'front-99xp';
-import bbxf from 'backbone-front-99xp';
-import mnx from '../marionette';
+import vx from 'backbone-front-99xp';
 import sync from './sync';
 
 var App;
@@ -223,7 +221,7 @@ export default sync.extend({
             }
         }
         
-        !('gobackUrl' in this) ? Backbone.history.history.back() : bbxf.router.navigate(url, {trigger: true});
+        !('gobackUrl' in this) ? Backbone.history.history.back() : vx.router.navigate(url, {trigger: true});
     },
     getDefaultActions() {
         return [

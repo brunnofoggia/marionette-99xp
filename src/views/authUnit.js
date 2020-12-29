@@ -1,8 +1,6 @@
-import vx from 'front-99xp';
+import _ from 'underscore-99xp';
 
 import authAccess from 'backbone-front-99xp/src/collections/authAccess';
-
-var _ = vx._;
 
 var authUnit = {
     addAuthAccessRelated() {

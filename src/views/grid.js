@@ -1,6 +1,7 @@
-import vx from 'front-99xp';
-import bbxf from 'backbone-front-99xp';
-import mnx from '../marionette';
+import vx from 'backbone-front-99xp';
+import _ from 'underscore-99xp';
+
+import mnx from '../define';
 
 import autoUtilEvents from './autoUtilEvents';
 import template from 'marionette-99xp/src/templates/grid.jst';
@@ -10,7 +11,6 @@ import listView from './list';
 import paginationView from './pagination';
 import authUnit from './authUnit';
 
-var _ = vx._;
 var App = vx.locator.getItem('iApp');
 
 export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(autoUtilEvents), {
@@ -36,16 +36,16 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
         this.setGrid();
         vx.debug.globalify('currentView', this);
         vx.debug.globalify('currentCollection', this.collection);
-        
+
         this.options.get = () => this.options;
         (!('sort' in this.options) || (typeof this.options.sort !== 'object' && +this.options.sort === 1)) && (this.options.sort = ['id', 'asc']);
-        
+
         this.options.results = () => this.provideResults();
         !('filters' in this.options) && (this.options.filters = {});
         this.options.filters.collection = this.collection;
         this.showChildView('filter', new filterView(this.options.filters));
         this.showChildView('list', new listView(this.options));
-        
+
         ('legend' in this.options) && this.showChildView('legend', new (mnx.view.extend(
                 {template: this.options.legend.template || legendTemplate}))(this.options.legend)
             );
@@ -55,7 +55,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
             this.getRegion('filter').currentView && this.getRegion('filter').currentView.render();
             this.getRegion('list').currentView && this.getRegion('list').currentView.render();
             this.getRegion('pagination').currentView && this.getRegion('pagination').currentView.render();
-            
+
             this.afterRender && this.afterRender();
         };
         this.listenTo(this.collection, 'ready', fnCollectionReady);
@@ -63,17 +63,17 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
         this.listenTo(this.getRegion('filter').currentView, 'search', () => {
 //            this.getRegion('list').currentView && this.getRegion('list').currentView.render();
             this.getRegion('pagination').currentView && this.getRegion('pagination').currentView.gofirst();
-            
+
             this.afterRender && this.afterRender();
         });
 
         this.listenTo(this.getRegion('pagination').currentView, 'gopage', () => {
             this.getRegion('list').currentView && this.getRegion('list').currentView.render();
             this.getRegion('pagination').currentView && this.getRegion('pagination').currentView.render();
-            
+
             this.afterRender && this.afterRender();
         });
-        
+
         if(this.options.sort !== false) {
             this.listenTo(this.getRegion('list').currentView, 'orderby', (col) => {
                 if(this.options.sort[0] === col) {
@@ -85,11 +85,11 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
 
                 this.getRegion('pagination').currentView && this.getRegion('pagination').currentView.render();
                 this.getRegion('list').currentView && this.getRegion('list').currentView.render();
-                
+
                 this.afterRender && this.afterRender();
             });
         }
-        
+
         ('addAuthAccessRelated' in this) && this.addAuthAccessRelated();
         this.fetchRelatedLists();
 
@@ -107,13 +107,13 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
     sortResults(r) {
         var colInfo = _.findWhere(this.options.cols, {name: this.options.sort[0]}) || {},
             i = typeof colInfo.order !== 'undefined' ? colInfo.order : this.options.sort[0];
-        
+
         typeof i === 'string' && (i in this.sortType) && (i = {type: i});
         typeof i === 'object' && (i = _.partial(this.sortType[i.type], colInfo, i));
-        
+
         r = _.sortBy(r, i);
         if(this.options.sort[1] === 'desc') r = r.reverse();
-        
+
         return r;
     },
     remove() {
@@ -151,7 +151,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
         var selectedModel = this.collection.find((model) => model.cid == selectedRow),
                 route = $(e.currentTarget).attr('data-route').replace(/\/pk$/, '/' + selectedModel.id);
 
-        bbxf.router.navigate(route, {trigger: true});
+        vx.router.navigate(route, {trigger: true});
     },
     getDefaultActions() {
         return [

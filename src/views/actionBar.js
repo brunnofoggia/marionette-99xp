@@ -1,7 +1,5 @@
-import vx from 'front-99xp';
-import mnx from '../marionette';
-
-var _ = vx._;
+import _ from 'underscore-99xp';
+import mnx from '../define';
 
 import template from '../templates/actionBar.jst';
 

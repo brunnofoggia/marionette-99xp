@@ -1,5 +1,5 @@
 
-import vx from 'front-99xp';
+import vx from 'backbone-front-99xp';
 import _ from 'underscore-99xp';
 
 export default {

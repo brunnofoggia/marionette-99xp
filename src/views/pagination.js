@@ -1,9 +1,7 @@
-import vx from 'front-99xp';
-import mnx from '../marionette';
+import _ from 'underscore-99xp';
+import mnx from '../define';
 
 import template from 'marionette-99xp/src/templates/pagination.jst';
-
-var _ = vx._;
 
 export default mnx.view.extend({
     template: template,
