@@ -13,11 +13,11 @@ export default mnx.view.extend(_.extend({}, _.clone(mnx.utils.viewActions), _.cl
     onRender() {
         _.bind(mnx.utils.removeWrapper, this)();
 
-        if(!this.isReady()) return;
+        if(!this.isReady()===true) return;
         this.applyBehaviors(this.$el);
 
-        this.isReady() && this.setActions();
-        this.isReady() && this.afterRender && this.afterRender();
+        this.isReady()===true && this.setActions();
+        this.isReady()===true && this.afterRender && this.afterRender();
     },
     applyBehaviors($el) {
         Sk.waitFor(()=>$.fn.tooltip, ()=>$('[data-toggle="tooltip"]', $el).tooltip());
@@ -53,7 +53,7 @@ export default mnx.view.extend(_.extend({}, _.clone(mnx.utils.viewActions), _.cl
         // event added to render after loading auth access
         this.on('ready', () => this.render());
         ('addAuthAccessRelated' in this) && this.addAuthAccessRelated();
-        if(!this.fetchRelatedLists() && this.isReady()) {
+        if(!this.fetchRelatedLists() && this.isReady()===true) {
             this.render();
         }
 

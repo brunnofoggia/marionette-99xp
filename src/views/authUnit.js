@@ -36,7 +36,7 @@ var authUnit = {
         return l;
     },
     checkActionAccess(url) {
-        return (this.getRelatedAuthAccessKey() in this.relatedLists) && this.relatedLists[this.getRelatedAuthAccessKey()].isReady() &&
+        return (this.getRelatedAuthAccessKey() in this.relatedLists) && this.relatedLists[this.getRelatedAuthAccessKey()].isReady()===true &&
             (!(url in this.relatedLists[this.getRelatedAuthAccessKey()].relatedLists) || this.relatedLists[this.getRelatedAuthAccessKey()].relatedLists[url].isAuthorized()===true);
     },
     getRelatedAuthAccessKey() {

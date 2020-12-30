@@ -1,5 +1,5 @@
 import _ from 'underscore-99xp';
-import front from 'front-99xp';
+import vx from 'backbone-front-99xp';
 import Mn from 'backbone.marionette';
 import utils from './utils';
 
@@ -23,13 +23,16 @@ obj.view_prototype.renderSync = function () {
     var isReady = _.bind((this.isReady ? this.isReady : utils.isReady), this);
 
     clearTimeout(this.renderTimer); this.renderTimer=null;
-    if (isReady()) {
+    if (isReady()===true) {
         this.removeLoading && this.removeLoading('renderSync', 0);
         this.renderStatus = true;
         // _.bind(obj.view_prototype._render, this)();
         this._render();
     } else if(this.renderTimer===null) {
-        this.renderTimer = setTimeout(_.bind(function() { front.debug.log('interval insure');front.debug.log(this);this.render(); }, this), 500);
+        this.renderTimer = setTimeout(() => {
+            vx.debug.log('interval insure');
+            this.render();
+        }, 500);
     }
     return this;
 };
@@ -41,7 +44,7 @@ obj.view_prototype.renderPartial = function (viewName, opts = {}) {
 }
 
 obj.view_prototype.serializeData = function () {
-    var App = front.locator.getItem('iApp');
+    var App = vx.locate('iApp');
     return {
         App, _, view: this, model: this.model, collection: this.collection, 
         relatedLists: this.relatedLists || {}, options: this.options, cid: this.cid, 

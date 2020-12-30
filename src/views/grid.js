@@ -29,7 +29,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
 //    render: mnx.view.prototype.renderSync,
     onRender() {
         _.bind(mnx.utils.removeWrapper, this)();
-        vx.utils.when(()=>this.isReady(), ()=>this.setActions());
+        vx.utils.when(()=>this.isReady()===true, ()=>this.setActions());
     },
     initialize() {
         this.events = _.extend(_.clone(autoUtilEvents.events), this.events);
@@ -93,7 +93,7 @@ export default mnx.view.extend(_.extend(_.clone(mnx.utils.viewActions), _.clone(
         ('addAuthAccessRelated' in this) && this.addAuthAccessRelated();
         this.fetchRelatedLists();
 
-        !this.collection.isReady() ? this.collection.fetch() : fnCollectionReady();
+        !this.collection.isReady()===true ? this.collection.fetch() : fnCollectionReady();
     },
     provideResults() {
         return this.getRegion('pagination').currentView ? this.getRegion('pagination').currentView.set(this.sortResults(this.getRegion('filter').currentView.filterResults(this.collection))) : this.collection.models;

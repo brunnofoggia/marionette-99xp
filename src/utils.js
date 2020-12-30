@@ -1,9 +1,12 @@
 import _ from 'underscore-99xp';
-import front from 'front-99xp';
+import vx from 'backbone-front-99xp';
 
 import uxLoading from 'front-99xp/src/ux/loading';
+import Masks from 'front-99xp/src/masks/igorescobar';
 
-var obj = {};
+var obj = {
+    Masks
+};
 
 obj.removeWrapper = function () {
     if ('wrapperRemoved' in this)
@@ -21,8 +24,8 @@ obj.removeWrapper = function () {
 obj.isReady = function () {
     if (!this.waitToRender && 
             typeof this.template === 'function' && 
-            (!this.model || this.model.isReady()) && 
-            (!this.collection || this.collection.isReady()) && 
+            (!this.model || this.model.isReady()===true) && 
+            (!this.collection || this.collection.isReady()===true) && 
             (!('isAllRelatedReady' in this) || this.isAllRelatedReady())) {
         return true;
     }
@@ -69,7 +72,7 @@ obj.viewActions = {
         return _.template(tpl)(actionData);
     },
     showActions(actions=null) {
-        var App = front.locator.getItem('iApp');
+        var App = vx.locate('iApp');
 
         typeof App.getView()==='object' && 
                 ('setActions' in App.getView()) && 

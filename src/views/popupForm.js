@@ -25,7 +25,7 @@ export default popup.extend({
             }
         } else {
 //             concluir implementacao do initial render. quando nulo renderiza, quando tiver um status checado implementar o listentoonce na model
-//            !this.initialRenderOnState || this.model.isReady() ? this.render() : this.listenToOnce(this.model, this.initialRenderOnState, ()=>this.render());
+//            !this.initialRenderOnState || this.model.isReady()===true ? this.render() : this.listenToOnce(this.model, this.initialRenderOnState, ()=>this.render());
         }
         
         this.model.listenTo(this.model, 'removeError', (field)=>this.removeError(field));
