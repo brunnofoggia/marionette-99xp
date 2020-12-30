@@ -20,17 +20,18 @@ obj.view_prototype.renderSync = function () {
 //    }
 
     this.addLoading && this.addLoading('', 'renderSync');
-    var isReady = _.bind((this.isReady ? this.isReady : utils.isReady), this);
+    var isReadyFn = _.bind((this.isReady ? this.isReady : utils.isReady), this),
+        isReady = isReadyFn();
 
     clearTimeout(this.renderTimer); this.renderTimer=null;
-    if (isReady()===true) {
+    if (isReady===true) {
         this.removeLoading && this.removeLoading('renderSync', 0);
         this.renderStatus = true;
         // _.bind(obj.view_prototype._render, this)();
         this._render();
     } else if(this.renderTimer===null) {
         this.renderTimer = setTimeout(() => {
-            vx.debug.log('interval insure');
+            vx.debug.log(`interval insure ${isReady[0]} -${isReady[1] || '-'}`);
             this.render();
         }, 500);
     }

@@ -22,14 +22,34 @@ obj.removeWrapper = function () {
 }
 
 obj.isReady = function () {
-    if (!this.waitToRender && 
-            typeof this.template === 'function' && 
-            (!this.model || this.model.isReady()===true) && 
-            (!this.collection || this.collection.isReady()===true) && 
-            (!('isAllRelatedReady' in this) || this.isAllRelatedReady())) {
-        return true;
+    var s = true;
+    if (this.waitToRender) s = -1;
+    if (!typeof this.template === 'function') s = -2;
+    if ((this.model && !this.model.isReady()===true)) {
+        if (this.model.infoRelatedReady) s = [-31, this.model.infoRelatedReady];
+        s = -3;
     }
-    return false;
+    if ((this.collection && !this.collection.isReady()===true)) {
+        if (this.collection.infoRelatedReady) s = [-41,this.collection.infoRelatedReady];
+        if (this.collection.infoModelsReady) s = [-42,this.collection.infoModelsReady];
+        s = -4;
+    }
+    if((('isAllRelatedReady' in this) && !this.isAllRelatedReady()===true)) {
+        if (this.infoRelatedReady) s = [-51,this.infoRelatedReady];
+        s = -5;
+    }
+    typeof s === 'number' && (s=[s]);
+
+    return s;
+
+    // if (!this.waitToRender && 
+    //         typeof this.template === 'function' && 
+    //         (!this.model || this.model.isReady()===true) && 
+    //         (!this.collection || this.collection.isReady()===true) && 
+    //         (!('isAllRelatedReady' in this) || this.isAllRelatedReady())) {
+    //     return true;
+    // }
+    // return false;
 };
 
 // actions
