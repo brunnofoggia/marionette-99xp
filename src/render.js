@@ -8,6 +8,7 @@ var obj = {model: {}, collection: {}, view: {}, app: {}, model_prototype: {}, co
 
 obj.view_prototype._render = Mn.View.prototype.render;
 
+obj.view_prototype.waitToRender = false;
 obj.view_prototype.renderStatus = false;
 obj.view_prototype.renderTimer = null;
 obj.view_prototype._firstRender = true;
@@ -42,7 +43,7 @@ obj.view_prototype.renderPartial = function (viewName, opts = {}) {
 obj.view_prototype.serializeData = function () {
     var App = front.locator.getItem('iApp');
     return {
-        App: App, _: front._, view: this, model: this.model, collection: this.collection, 
+        App, _, view: this, model: this.model, collection: this.collection, 
         relatedLists: this.relatedLists || {}, options: this.options, cid: this.cid, 
         renderPartial: (viewName, opts) => this.renderPartial(viewName, opts)
     };
