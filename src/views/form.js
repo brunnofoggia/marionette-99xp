@@ -26,6 +26,10 @@ export default sync.extend({
         'focus input,select,textarea': 'setFocusBehavior',
         'blur input,select,textarea': 'setBlurBehavior',
     },
+    initialize() {
+        this.events = _.extend(_.clone(sync.prototype.events), this.events);
+        _.bind(sync.prototype.initialize, this)();
+    },
     applyBehaviors($el) {
         this.showRequired($el);
         sync.prototype.applyBehaviors.apply(this, arguments);
