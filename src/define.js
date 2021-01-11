@@ -2,6 +2,7 @@ import Mn from 'backbone.marionette';
 import _ from 'underscore-99xp';
 import bbxf from 'backbone-front-99xp';
 
+import app from './app';
 import locator from './locator';
 import render from './render';
 import utils from './utils';
@@ -10,7 +11,7 @@ var mnx = {};
 
 mnx.view = Mn.View.extend(_.extend({},_.clone(utils.viewLoading), _.clone(utils.viewScroll)));
 mnx.cview = Mn.CollectionView.extend(_.extend({},_.clone(utils.viewLoading), _.clone(utils.viewScroll)));
-mnx.app = Mn.Application.extend(_.extend({},_.clone(utils.viewLoading), _.clone(utils.viewScroll)));
+mnx.app = app;
 mnx.region = Mn.Region.extend();
 mnx.behavior = Mn.Behavior.extend();
 
