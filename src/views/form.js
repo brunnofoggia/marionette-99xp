@@ -21,6 +21,7 @@ export default sync.extend({
         'change textarea': 'setValue',
         'change .as-field': 'setValue',
         'submit form': 'save',
+        'click .cancel': 'cancel',
         'submit': 'save',
         'click label.auto-for:not([for])': 'setLabelFocus',
         'focus input,select,textarea': 'setFocusBehavior',
