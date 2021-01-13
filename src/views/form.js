@@ -31,6 +31,30 @@ export default sync.extend({
         this.events = _.extend(_.clone(sync.prototype.events), this.events);
         _.bind(sync.prototype.initialize, this)();
     },
+    renderListener() {
+        if(this.model) {
+            this.model.errorsMap = {};
+            if (this.options.id) {
+                if (this.model.morphState === this.renderOnState)
+                    this.render();
+                else {
+    //                this.listenToOnce(this.model, this.renderOnState, () => { this.render(); });
+                    this.listenTo(this.model, this.renderOnState, () => { this.render(); });
+                }
+                this.model.fetch();
+            } else {
+                if (this.model.morphState === this.initialRenderOnState) {
+                    this.render();
+                } else {
+                    this.listenToOnce(this.model, this.initialRenderOnState, () => { this.render(); });
+                }
+            }
+
+            this.model.listenTo(this.model, 'removeError', (field) => this.removeError(field));
+        }
+        
+        this.on('ready', () => this.render());
+    },
     applyBehaviors($el) {
         this.showRequired($el);
         sync.prototype.applyBehaviors.apply(this, arguments);

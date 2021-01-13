@@ -29,6 +29,17 @@ export default mnx.view.extend(_.extend({}, _.clone(mnx.utils.viewActions), _.cl
         this.events = _.extend(_.clone(autoUtilEvents.events), this.events);
         this.validateOnSet = false;
 
+        this.renderListener();
+
+        // event added to render after loading auth access
+        ('addAuthAccessRelated' in this) && this.addAuthAccessRelated();
+        if(!this.fetchRelatedLists() && this.isReady()===true) {
+            this.render();
+        }
+
+        return this;
+    },
+    renderListener() {
         if(this.model) {
             this.model.errorsMap = {};
             if (this.options.id) {
@@ -43,21 +54,14 @@ export default mnx.view.extend(_.extend({}, _.clone(mnx.utils.viewActions), _.cl
                 if (this.model.morphState === this.initialRenderOnState) {
                     this.render();
                 } else {
-                    this.listenToOnce(this.model, this.initialRenderOnState, () => { this.render(); });
+                    this.listenTo(this.model, this.initialRenderOnState, () => { this.render(); });
                 }
             }
 
             this.model.listenTo(this.model, 'removeError', (field) => this.removeError(field));
         }
-
-        // event added to render after loading auth access
+        
         this.on('ready', () => this.render());
-        ('addAuthAccessRelated' in this) && this.addAuthAccessRelated();
-        if(!this.fetchRelatedLists() && this.isReady()===true) {
-            this.render();
-        }
-
-        return this;
     },
     syncError(model, xhr) {
         this.removeSubmitLoading();
