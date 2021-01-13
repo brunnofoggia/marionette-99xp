@@ -14,11 +14,6 @@ obj.view_prototype.renderTimer = null;
 obj.view_prototype._firstRender = true;
 
 obj.view_prototype.renderSync = function () {
-//    if(this._firstRender) {
-//        this._firstRender = false;
-//        return;
-//    }
-
     this.addLoading && this.addLoading('', 'renderSync');
     var isReadyFn = _.bind((this.isReady ? this.isReady : utils.isReady), this),
         isReady = isReadyFn();

@@ -18,6 +18,7 @@ export default mnx.view.extend(_.extend({}, _.clone(mnx.utils.viewActions), _.cl
 
         this.isReady()===true && this.setActions();
         this.isReady()===true && this.afterRender && this.afterRender();
+        this._firstRender = false;
     },
     applyBehaviors($el) {
         Sk.waitFor(()=>$.fn.tooltip, ()=>$('[data-toggle="tooltip"]', $el).tooltip());
