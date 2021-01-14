@@ -83,6 +83,7 @@ export default sync.extend({
         }
     },
     showRequired($form) {
+        if(!this.model || !this.model.getMandatoryValidations) return;
         var v = this.model.getMandatoryValidations(this.model.attributes);
         
         // if(_.size(v) > 0) {
