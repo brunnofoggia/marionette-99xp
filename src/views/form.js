@@ -152,6 +152,7 @@ export default sync.extend({
     },
     clearError(field) {
         $('[name="' + field + '"],.as-field[data-field-name="' + field + '"]').length > 0 && 
+                $('[name="' + field + '"],.as-field[data-field-name="' + field + '"]').popover &&
                 ($('[name="' + field + '"],.as-field[data-field-name="' + field + '"]').popover('dispose'));
     },
 //    showInfos() {
