@@ -77,11 +77,12 @@ export default Mn.Application.extend(
                         var $scroll = $($el.attr("href")),
                             offsetTop = $scroll.offset()["top"],
                             headerHeight = this.headerHeight();
+
                         $("body, html").animate(
                             {
                                 scrollTop: offsetTop - headerHeight,
                             },
-                            1000
+                            parseInt($el.attr("data-scroll-speed") || 1000, 10)
                         );
                     }
                 );
