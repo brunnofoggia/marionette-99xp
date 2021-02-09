@@ -9,9 +9,35 @@ export default Mn.Application.extend(
     _.extend(
         {
             router: vx.router,
+            navigationData: {},
             navigate(u, o = {}) {
                 o = _.defaults(o, { trigger: true });
+                u.indexOf("/") !== 0 && (u = "/" + u);
+                var navigationData = {
+                    page_title: u.split("/")[1] || "index",
+                    page_path: u,
+                };
+
+                if (
+                    this.navigationData.page_path !== navigationData.page_path
+                ) {
+                    this.navigationData = navigationData;
+                    this.gtag("event", "page_view", this.navigationData);
+                }
                 vx.router.navigate(u, o);
+            },
+            getNavigationData(u) {
+                if (!this.navigationData.page_path || u) {
+                    !u && (u = window.location.pathname);
+                    u.indexOf("/") !== 0 && (u = "/" + u);
+                    var navigationData = {
+                        page_title: u.split("/")[1] || "index",
+                        page_path: u,
+                    };
+
+                    return navigationData;
+                }
+                return this.navigationData;
             },
             startRouter() {
                 if (Bb.history && !this.historyStarted) {
@@ -59,7 +85,7 @@ export default Mn.Application.extend(
                     e && vx.events.preventDefault(e);
                     if (!this.online) return;
                     var el = e.currentTarget;
-                    vx.router.navigate(el.attributes.href.value, {
+                    this.navigate(el.attributes.href.value, {
                         trigger: true,
                     });
                 });
