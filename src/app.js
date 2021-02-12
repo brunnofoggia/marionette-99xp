@@ -93,7 +93,7 @@ export default Mn.Application.extend(
             globalEventClickAnchor() {
                 $(document).on(
                     "click",
-                    'a[href^="#"]:not([data-toggle])',
+                    'a[href^="#"]:not([data-toggle]),button[href][href^="#"]:not([data-toggle])',
                     (e) => {
                         if (!this.online) return;
                         var $el = $(e.currentTarget);
