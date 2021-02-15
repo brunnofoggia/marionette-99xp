@@ -68,7 +68,10 @@ export default App.extend({
         vx.debug.globalify("app", this);
         // remove loading somente quando a appview estiver exibida
         vx.utils.when(
-            () => this.appView.isTrullyVisible,
+            () => {
+                vx.debug.log("waiting appView.isTrullyVisible");
+                return this.appView.isTrullyVisible;
+            },
             () => {
                 vx.ux.loading.remove(this._loadId);
             }
@@ -88,10 +91,11 @@ export default App.extend({
         );
     },
     showContent(view) {
+        vx.debug.log("showcontent called");
         vx.utils.when(
             () => this.getView(),
             () => {
-                vx.debug.log("showcontent called");
+                vx.debug.log("showcontent executed");
                 this.isLoggedEvents();
                 var viewObj = typeof view === "object" ? view : null;
 
