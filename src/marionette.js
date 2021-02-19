@@ -1,10 +1,10 @@
-import mnx from './define';
-import grid from './views/grid';
-import form from './views/form';
-import popup from './views/popup';
-import popupForm from './views/popupForm';
-import popupGrid from './views/popupGrid';
-import sync from './views/sync';
+import mnx from "./define";
+import grid from "./views/grid";
+import form from "./views/form";
+import popup from "./views/popup";
+import popupForm from "./views/popupForm";
+import popupGrid from "./views/popupGrid";
+import sync from "./views/sync";
 
 mnx.views = {};
 mnx.views.grid = grid;
