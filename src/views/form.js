@@ -35,25 +35,21 @@ export default sync.extend({
         if (this.model) {
             this.model.errorsMap = {};
             if (this.options.id) {
-                if (this.model.morphState === this.renderOnState) this.render();
+                if (this.areReadyModelAndCollection() === true) this.render();
                 else {
-                    //                this.listenToOnce(this.model, this.renderOnState, () => { this.render(); });
+                    // note: why listenTo here and listenToOnce below ?
                     this.listenTo(this.model, this.renderOnState, () => {
                         this.render();
                     });
                 }
                 this.model.fetch();
             } else {
-                if (this.model.morphState === this.initialRenderOnState) {
+                if (this.areReadyModelAndCollection() === true) {
                     this.render();
                 } else {
-                    this.listenToOnce(
-                        this.model,
-                        this.initialRenderOnState,
-                        () => {
-                            this.render();
-                        }
-                    );
+                    this.listenToOnce(this.model, this.renderOnState, () => {
+                        this.render();
+                    });
                 }
             }
 

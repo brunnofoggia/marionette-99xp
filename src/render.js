@@ -21,6 +21,10 @@ obj.view_prototype.renderStatus = false;
 obj.view_prototype.renderTimer = null;
 obj.view_prototype._firstRender = true;
 
+obj.view_prototype.isReady = utils.isReady;
+obj.view_prototype.areReadyModelAndCollection =
+    utils.areReadyModelAndCollection;
+
 obj.view_prototype.renderSync = function () {
     this.addLoading && this.addLoading("", "renderSync");
     var isReadyFn = _.bind(this.isReady ? this.isReady : utils.isReady, this),

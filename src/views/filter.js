@@ -13,7 +13,6 @@ export default mnx.view.extend({
         submit: "search",
     },
     masks: Masks,
-    isReady: mnx.utils.isReady,
     initialRenderOnState: "ready",
     renderOnState: "ready",
     render: mnx.view.prototype.renderSync, // mnx.view.prototype.renderSync

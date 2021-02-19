@@ -18,7 +18,6 @@ export default popup.extend({
         pagination: ".pagination",
         legend: ".legend",
     },
-    isReady: mnx.utils.isReady,
     provideResults: grid.prototype.provideResults,
     sortResults: grid.prototype.sortResults,
     sortType: grid.prototype.sortType,

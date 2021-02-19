@@ -10,7 +10,6 @@ export default mnx.view.extend({
         "click .item": "selectRow",
         "click .orderby": "orderby",
     },
-    isReady: mnx.utils.isReady,
     initialRenderOnState: "ready",
     renderOnState: "ready",
     render: mnx.view.prototype.renderSync,

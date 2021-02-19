@@ -8,7 +8,6 @@ export default mnx.view.extend(
     _.extend({}, _.clone(mnx.utils.viewActions), _.clone(autoUtilEvents), {
         initialRenderOnState: "ready",
         renderOnState: "ready",
-        isReady: mnx.utils.isReady,
         render: mnx.view.prototype.renderSync,
         masks: Masks,
         onRender() {
@@ -48,7 +47,7 @@ export default mnx.view.extend(
             if (this.model) {
                 this.model.errorsMap = {};
                 if (this.options.id) {
-                    if (this.model.morphState === this.renderOnState)
+                    if (this.areReadyModelAndCollection() === true)
                         this.render();
                     else {
                         //                this.listenToOnce(this.model, this.renderOnState, () => { this.render(); });
@@ -58,16 +57,12 @@ export default mnx.view.extend(
                     }
                     this.model.fetch();
                 } else {
-                    if (this.model.morphState === this.initialRenderOnState) {
+                    if (this.areReadyModelAndCollection() === true) {
                         this.render();
                     } else {
-                        this.listenTo(
-                            this.model,
-                            this.initialRenderOnState,
-                            () => {
-                                this.render();
-                            }
-                        );
+                        this.listenTo(this.model, this.renderOnState, () => {
+                            this.render();
+                        });
                     }
                 }
 

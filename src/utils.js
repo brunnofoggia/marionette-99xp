@@ -20,10 +20,8 @@ obj.removeWrapper = function () {
     this.wrapperRemoved = true;
 };
 
-obj.isReady = function () {
+obj.areReadyModelAndCollection = function () {
     var s = true;
-    if (this.waitToRender) s = -1;
-    if (!typeof this.template === "function") s = -2;
     if (this.model && !this.model.isReady() === true) {
         if (this.model.infoRelatedReady) s = [-31, this.model.infoRelatedReady];
         s = -3;
@@ -35,7 +33,20 @@ obj.isReady = function () {
             s = [-42, this.collection.infoModelsReady];
         s = -4;
     }
-    if ("isAllRelatedReady" in this && !this.isAllRelatedReady() === true) {
+    return s;
+};
+
+obj.isReady = function () {
+    var s = true,
+        modelAndCollectionReady = this.areReadyModelAndCollection();
+
+    if (this.waitToRender) s = -1;
+    else if (!typeof this.template === "function") s = -2;
+    else if (modelAndCollectionReady === true) s = modelAndCollectionReady;
+    else if (
+        "isAllRelatedReady" in this &&
+        !this.isAllRelatedReady() === true
+    ) {
         if (this.infoRelatedReady) s = [-51, this.infoRelatedReady];
         s = -5;
     }

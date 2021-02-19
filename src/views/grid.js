@@ -23,7 +23,6 @@ export default mnx.view.extend(
             legend: ".legend",
         },
         events: {},
-        isReady: mnx.utils.isReady,
         //    initialRenderOnState: 'ready',
         //    renderOnState: 'ready',
         //    render: mnx.view.prototype.renderSync,
