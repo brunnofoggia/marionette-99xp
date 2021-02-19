@@ -42,7 +42,7 @@ obj.isReady = function () {
 
     if (this.waitToRender) s = -1;
     else if (!typeof this.template === "function") s = -2;
-    else if (modelAndCollectionReady === true) s = modelAndCollectionReady;
+    else if (modelAndCollectionReady !== true) s = modelAndCollectionReady;
     else if (
         "isAllRelatedReady" in this &&
         !this.isAllRelatedReady() === true

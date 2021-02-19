@@ -446,4 +446,8 @@ export default sync.extend({
             },
         });
     },
+    clear() {
+        $("input, textarea", this.$el).val("");
+        $("select option", this.$el).prop("selected", false);
+    },
 });
