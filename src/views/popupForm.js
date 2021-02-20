@@ -1,4 +1,5 @@
 import _ from "underscore-99xp";
+import vx from "backbone-front-99xp";
 
 import popup from "./popup";
 import actionBar from "./actionBar";
@@ -97,13 +98,13 @@ export default popup.extend({
             var fn = () => {
                 saved && this.trigger("saved");
                 this.trigger("close");
-                Sk.popup.close(this.modal);
+                vx.app().ux.popup.close(this.modal);
             };
 
             fn();
         } else {
             this.trigger("close");
-            Sk.popup.close(this.modal);
+            vx.app().ux.popup.close(this.modal);
         }
     },
 });

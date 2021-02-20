@@ -209,7 +209,7 @@ export default mnx.view.extend(
             );
             var id = selectedModel.id;
 
-            Sk.popup.simple.confirm({
+            vx.app().ux.popup.confirm({
                 title: "Confirmação de Exclusão",
                 msg: "Você confirma a exclusão do registro #" + id + " ?",
                 confirm: "Confirmar",

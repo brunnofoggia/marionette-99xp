@@ -1,4 +1,5 @@
 import _ from "underscore-99xp";
+import vx from "backbone-front-99xp";
 
 import form from "./form";
 import actionBar from "./actionBar";
@@ -37,7 +38,7 @@ export default form.extend({
     },
     setModal() {
         if (!this.modal) {
-            this.modal = Sk.popup.simple.info({
+            this.modal = vx.app().ux.popup.info({
                 title: this.title || " ",
                 body: "<div></div>",
             });
@@ -60,7 +61,7 @@ export default form.extend({
         saved && this.trigger("saved");
         this.trigger("close");
 
-        Sk.popup.close(this.modal);
+        vx.app().ux.popup.close(this.modal);
     },
     getDefaultActions() {
         return [];

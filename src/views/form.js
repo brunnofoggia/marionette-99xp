@@ -386,7 +386,7 @@ export default sync.extend({
     editPopup(e, $el, form, collection, closeFn) {
         var id = $("option:selected", $el).val();
         if (!id) {
-            return Sk.popup.simple.info({
+            return vx.app().ux.popup.info({
                 title: "Problema encontrado",
                 body: "Selecione o item que deseja alterar",
             });
@@ -416,7 +416,7 @@ export default sync.extend({
     rmvPopupItem($el, collection) {
         var id = $("option:selected", $el).val();
         if (!id) {
-            return Sk.popup.simple.info({
+            return vx.app().ux.popup.info({
                 title: "Problema encontrado",
                 body: "Selecione o item que deseja excluir",
             });
@@ -424,7 +424,7 @@ export default sync.extend({
 
         var selectedModel = collection.find((model) => model.id == id);
 
-        Sk.popup.simple.confirm({
+        vx.app().ux.popup.confirm({
             title: "Confirmação de Exclusão",
             msg:
                 'Você confirma a exclusão do item "' +
