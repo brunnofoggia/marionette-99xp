@@ -115,11 +115,9 @@ obj.viewActions = {
         return _.template(tpl)(actionData);
     },
     showActions(actions = null) {
-        var App = vx.locate("iApp");
-
-        typeof App.getView() === "object" &&
-            "setActions" in App.getView() &&
-            App.getView().setActions(actions, this);
+        typeof vx.app().getView() === "object" &&
+            "setActions" in vx.app().getView() &&
+            vx.app().getView().setActions(actions, this);
     },
 };
 

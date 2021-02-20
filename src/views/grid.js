@@ -11,8 +11,6 @@ import listView from "./list";
 import paginationView from "./pagination";
 import authUnit from "./authUnit";
 
-var App = vx.locator.getItem("iApp");
-
 export default mnx.view.extend(
     _.extend(_.clone(mnx.utils.viewActions), _.clone(autoUtilEvents), {
         template: template,
@@ -220,7 +218,7 @@ export default mnx.view.extend(
                     if (status) {
                         this.listenToOnce(selectedModel, "sync", () => {
                             this.collection.fetch({ reset: true });
-                            App.ux.toast.add({
+                            vx.app().ux.toast.add({
                                 msg: `Registro #${id} removido`,
                                 color: "danger text-danger",
                             });

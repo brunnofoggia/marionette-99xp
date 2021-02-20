@@ -52,9 +52,8 @@ obj.view_prototype.renderPartial = function (viewName, opts = {}) {
 };
 
 obj.view_prototype.serializeData = function () {
-    var App = vx.locate("iApp");
     return {
-        App,
+        App: vx.app(),
         vx,
         _,
         view: this,

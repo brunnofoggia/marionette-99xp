@@ -2,8 +2,6 @@ import _ from "underscore-99xp";
 import vx from "backbone-front-99xp";
 import sync from "./sync";
 
-var App;
-
 export default sync.extend({
     regions: {
         infos: ".infos",
@@ -191,8 +189,7 @@ export default sync.extend({
                     .parents(".popover:first")
                     .addClass("danger");
             } else {
-                App = vx.locator.getItem("iApp");
-                App.ux.toast.add({
+                vx.app().ux.toast.add({
                     msg: error[1] + " (" + fieldName + ")",
                     color: "danger text-dark font-weight-bold",
                 });
@@ -334,9 +331,8 @@ export default sync.extend({
         this.goback();
     },
     goback(saved) {
-        App = vx.locator.getItem("iApp");
         saved &&
-            App.ux.toast.add({
+            vx.app().ux.toast.add({
                 msg: "Registro #" + this.model.id + " salvo com sucesso",
                 color: "info text-dark",
             });

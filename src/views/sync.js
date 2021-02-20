@@ -93,8 +93,7 @@ export default mnx.view.extend(
             } else if ("authorization" in json && json.authorization)
                 msg = "Acesso negado";
 
-            App = vx.locator.getItem("iApp");
-            App.ux.toast.add({
+            vx.app().ux.toast.add({
                 msg: msg,
                 color: "danger text-dark font-weight-bold",
             });

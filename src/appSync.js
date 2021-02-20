@@ -9,13 +9,13 @@ export default App.extend({
     relatedLists: {},
     isAllRelatedReady: vx.view.prototype.isAllRelatedReady,
     fetchRelatedLists(opts = {}) {
-        if (!vx.locator.getItem("iApp")) {
+        if (!vx.app()) {
             return setTimeout(() => this.fetchRelatedLists(opts), 10);
         }
         return _.bind(vx.view.prototype.fetchRelatedLists, this)(opts);
     },
     fetchAndStateRelatedList(name, opts = {}) {
-        if (!vx.locator.getItem("iApp")) {
+        if (!vx.app()) {
             return setTimeout(
                 () => this.fetchAndStateRelatedList(name, opts),
                 10
