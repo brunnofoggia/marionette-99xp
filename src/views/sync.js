@@ -21,7 +21,7 @@ export default mnx.view.extend(
             this._firstRender = false;
         },
         applyBehaviors($el) {
-            Sk.waitFor(
+            vx.utils.when(
                 () => $.fn.tooltip,
                 () => $('[data-toggle="tooltip"]', $el).tooltip()
             );
