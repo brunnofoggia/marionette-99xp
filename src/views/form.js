@@ -35,8 +35,8 @@ export default sync.extend({
             if (this.options.id) {
                 if (this.areReadyModelAndCollection() === true) this.render();
                 else {
-                    // note: why listenTo here and listenToOnce below ?
-                    this.listenTo(this.model, this.renderOnState, () => {
+                    // note: listenToOnce because when the model has relatedLists associated, they can be used to load data while the form is loaded.
+                    this.listenToOnce(this.model, this.renderOnState, () => {
                         this.render();
                     });
                 }
