@@ -77,7 +77,7 @@ export default mnx.view.extend(
             this.removeSubmitLoading();
             this.showSyncError(model, xhr);
         },
-        showSyncError(model, xhr) {
+        getSyncErrorMsg(model, xhr) {
             var json = {};
             if (xhr.responseJSON) {
                 json = xhr.responseJSON;
@@ -93,8 +93,11 @@ export default mnx.view.extend(
             } else if ("authorization" in json && json.authorization)
                 msg = "Acesso negado";
 
+            return msg;
+        },
+        showSyncError(model, xhr) {
             vx.app().ux.toast.add({
-                msg: msg,
+                msg: this.getSyncErrorMsg(model, xhr),
                 color: "danger text-dark font-weight-bold",
             });
         },
