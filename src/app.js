@@ -81,14 +81,18 @@ export default Mn.Application.extend(
                 this.globalEventClickAnchor();
             },
             globalEventClickLink() {
-                $(document).on("click", 'a[href^="/"]:not([target])', (e) => {
-                    e && vx.events.preventDefault(e);
-                    if (!this.online) return;
-                    var el = e.currentTarget;
-                    this.navigate(el.attributes.href.value, {
-                        trigger: true,
-                    });
-                });
+                $(document).on(
+                    "click",
+                    'a[href^="/"]:not([target]),button[href^="/"]:not([target])',
+                    (e) => {
+                        e && vx.events.preventDefault(e);
+                        if (!this.online) return;
+                        var el = e.currentTarget;
+                        this.navigate(el.attributes.href.value, {
+                            trigger: true,
+                        });
+                    }
+                );
             },
             globalEventClickAnchor() {
                 $(document).on(
