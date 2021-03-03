@@ -2,42 +2,37 @@
     <div class="content">
         {% if(options.cols && options.cols.length>0) { var c = 0; %}
         {% for(filter of options.cols) { %}
-        
-        {% if(c === 0 || (c % 3) === 0) { %}
-            {% if ((c % 3) === 0) { %}</div>{% } %}
-        <div class="form-row">
-        {% } %}
-        
-            <div class="form-group col-lg-4">
-                <label for="{{filter.name}}" class='text-dark'>{{filter.title}}</label>
-                {% if (!filter.type || filter.type === 'text') { %}
-                    <input type="text" class="form-control" name="{{filter.name}}" {{filter.mask ? 'data-mask="'+filter.mask+'"' : ''}}>
-                {% } else if(filter.type === 'list') { %}
-                    <select class="form-control" name="{{filter.name}}">
-                        <option value=''>-</option>
-                        {% if ('models' in filter) { %}
-                            {% for(let filterModel of filter.models()) { %}
-                            <option value="{{filterModel.get(filterModel.idAttribute)}}">{{filterModel.getTitle()}}</option>
+
+            {% if(c === 0 || (c % 3) === 0) { %}
+                {% if ((c % 3) === 0) { %}</div>{% } %}
+            <div class="form-row">
+            {% } %}
+
+                <div class="form-group col-lg-4">
+                    <label for="{{filter.name}}" class='text-dark'>{{filter.title}}</label>
+                    {% if (!filter.type || filter.type === 'text') { %}
+                        <input type="text" class="form-control" name="{{filter.name}}" {{filter.mask ? 'data-mask="'+filter.mask+'"' : ''}}>
+                    {% } else if(filter.type === 'list') { %}
+                        <select class="form-control" name="{{filter.name}}">
+                            <option value=''>-</option>
+                            {% if ('models' in filter) { %}
+                                {% for(let filterModel of filter.models()) { %}
+                                <option value="{{filterModel.get(filterModel.idAttribute)}}">{{filterModel.getTitle()}}</option>
+                                {% } %}
+                            {% } else if('list' in filter){ let filterList = filter.list(); %}
+                                {% for(let x in filterList) { filterItem = filterList[x]; %}
+                                <option value="{{'id' in filterItem ? filterItem.id : x}}">{{filterItem.title}}</option>
+                                {% } %}
                             {% } %}
-                        {% } else if('list' in filter){ let filterList = filter.list(); %}
-                            {% for(let x in filterList) { filterItem = filterList[x]; %}
-                            <option value="{{'id' in filterItem ? filterItem.id : x}}">{{filterItem.title}}</option>
-                            {% } %}
-                        {% } %}
-                    </select>
-                {% } %}
-            </div>
-        
-        {% if(c > 0 && (c % 3) === 0) { %}
-        </div>
-        {% } c++; %}
-        
+                        </select>
+                    {% } %}
+                </div>
+                {% c++; %}
+
         {% } %}
-        
-        {% if(((c) / 3) > 0) { %}
+
         </div>
-        {% } %}
-        
+
         {% } %}
         <button type='button' class='search btn btn-primary'>Pesquisar</button>
         <button type='button' class='clear btn btn-default'>Limpar</button>
