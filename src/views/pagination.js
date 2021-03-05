@@ -30,9 +30,9 @@ export default mnx.view.extend({
         );
         this.trigger("gopage");
     },
-    gofirst() {
+    gofirst(silent = false) {
         this.options.page = 1;
-        this.trigger("gopage");
+        !silent && this.trigger("gopage");
     },
     goprev() {
         this.options.page -= 1;
