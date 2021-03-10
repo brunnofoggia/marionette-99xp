@@ -155,9 +155,10 @@ export default mnx.view.extend(
                     "filter"
                 ).currentView.model;
                 if (this.collection.isReady() !== true) {
-                    if (this.options.filterOnServer) {
-                        this.collection.filterOnServer = true;
-                    }
+                    this.collection.filterOnServer =
+                        this.options.filterOnServer || false;
+                    this.collection.limitOnServer =
+                        this.options.limitOnServer || 0;
                     return this.collection.fetch({ reset: true });
                 }
                 fnCollectionReady();

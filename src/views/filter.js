@@ -6,7 +6,7 @@ import form from "./form";
 import template from "marionette-99xp/src/templates/filter.jst";
 import Masks from "front-99xp/src/masks/igorescobar";
 
-var model = vx.vmodel.extend({ format: {}, defaults: {} });
+var model = vx.vmodel.extend({ format: {}, defaults: {}, sendEmptyFilter: {} });
 
 export default form.extend({
     template: template,
@@ -34,6 +34,7 @@ export default form.extend({
             if (col.format) {
                 this.model.format[col.name] = col.format;
             }
+            this.model.sendEmptyFilter[col.name] = col.sendEmpty || false;
         });
     },
     onRender() {

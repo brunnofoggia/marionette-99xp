@@ -32,7 +32,7 @@ export default mnx.view.extend({
     },
     gofirst(silent = false) {
         this.options.page = 1;
-        !silent && this.trigger("gopage");
+        silent !== true && this.trigger("gopage");
     },
     goprev() {
         this.options.page -= 1;
