@@ -45,16 +45,21 @@ export default mnx.view.extend(
                 vx.debug.globalify("currentCollection", this.collection);
 
                 this.options.get = () => this.options;
-                (!("sort" in this.options) ||
-                    (typeof this.options.sort !== "object" &&
-                        +this.options.sort === 1)) &&
-                    (this.options.sort = ["id", "asc"]);
+                this.collection.setSort(this.options.sort);
 
                 this.options.results = () => this.provideResults();
                 !("filters" in this.options) && (this.options.filters = {});
-                this.options.filters.collection = this.collection;
-                this.options.filters.filterOnServer = !!this.options
-                    .filterOnServer;
+
+                !("pagination" in this.options) &&
+                    (this.options.pagination = {});
+                _.map(this.options.pagination, (v, x) => {
+                    this.collection.pagination[x] = v;
+                });
+
+                this.options.pagination.collection = this.options.filters.collection = this.collection;
+                this.collection.filterOnServer = !!this.options.filterOnServer;
+                this.collection.limitOnServer = this.options.limitOnServer || 0;
+
                 this.showChildView(
                     "filter",
                     new filterView(this.options.filters)
@@ -92,7 +97,7 @@ export default mnx.view.extend(
                     this.getRegion("filter").currentView,
                     "search",
                     () => {
-                        if (this.options.filterOnServer) {
+                        if (this.collection.filterOnServer) {
                             this.addSubmitLoading("Pesquisando");
                             this.getRegion("pagination").currentView &&
                                 this.getRegion(
@@ -126,15 +131,7 @@ export default mnx.view.extend(
                         this.getRegion("list").currentView,
                         "orderby",
                         (col) => {
-                            if (this.options.sort[0] === col) {
-                                this.options.sort[1] =
-                                    this.options.sort[1] == "asc"
-                                        ? "desc"
-                                        : "asc";
-                            } else {
-                                this.options.sort[0] = col;
-                                this.options.sort[1] = "asc";
-                            }
+                            this.collection.changeSort(col);
 
                             this.getRegion("pagination").currentView &&
                                 this.getRegion(
@@ -155,83 +152,16 @@ export default mnx.view.extend(
                     "filter"
                 ).currentView.model;
                 if (this.collection.isReady() !== true) {
-                    this.collection.filterOnServer =
-                        this.options.filterOnServer || false;
-                    this.collection.limitOnServer =
-                        this.options.limitOnServer || 0;
                     return this.collection.fetch({ reset: true });
                 }
                 fnCollectionReady();
             },
             provideResults() {
-                return this.getRegion("pagination").currentView
-                    ? this.getRegion("pagination").currentView.set(
-                          this.sortResults(
-                              this.getRegion(
-                                  "filter"
-                              ).currentView.filterResults(this.collection)
-                          )
-                      )
-                    : this.collection.models;
-            },
-            sortType: {
-                "#int": (col, options, model) =>
-                    parseInt(
-                        col.orderVal
-                            ? col.orderVal(model)
-                            : col.val
-                            ? col.val(model)
-                            : model.get(col.name),
-                        10
-                    ),
-                "#date": (col, options, model) =>
-                    parseInt(
-                        vx
-                            .format(
-                                col.orderVal
-                                    ? col.orderVal(model)
-                                    : col.val
-                                    ? col.val(model)
-                                    : model.get(col.name),
-                                "date",
-                                1
-                            )
-                            .replace(/[^0-9]/g, ""),
-                        10
-                    ),
-                "#list": (col, options, model) =>
-                    col.orderVal
-                        ? col.orderVal(model)
-                        : col.val
-                        ? col.val(model)
-                        : model.get(col.name),
-                "#orderval": (col, options, model) =>
-                    col.orderVal
-                        ? col.orderVal(model)
-                        : col.val
-                        ? col.val(model)
-                        : model.get(col.name),
-            },
-            sortResults(r) {
-                var colInfo =
-                        _.findWhere(this.options.cols, {
-                            name: this.options.sort[0],
-                        }) || {},
-                    i =
-                        typeof colInfo.order !== "undefined"
-                            ? colInfo.order
-                            : "#orderval";
+                var filtered = this.collection.filterResults(),
+                    sorted = this.collection.sortResults(filtered),
+                    paginated = this.collection.paginate(sorted);
 
-                typeof i === "string" &&
-                    i in this.sortType &&
-                    (i = { type: i });
-                typeof i === "object" &&
-                    (i = _.partial(this.sortType[i.type], colInfo, i));
-
-                r = _.sortBy(r, i);
-                if (this.options.sort[1] === "desc") r = r.reverse();
-
-                return r;
+                return paginated;
             },
             remove() {
                 var selectedRow = this.getRegion(
