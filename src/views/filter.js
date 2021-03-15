@@ -6,7 +6,12 @@ import form from "./form";
 import template from "marionette-99xp/src/templates/filter.jst";
 import Masks from "front-99xp/src/masks/igorescobar";
 
-var model = vx.vmodel.extend({ format: {}, defaults: {}, sendEmptyFilter: {} });
+var model = vx.vmodel.extend({
+    idAttribute: "_filterId",
+    format: {},
+    defaults: {},
+    sendEmptyFilter: {},
+});
 
 export default form.extend({
     template: template,
@@ -52,7 +57,7 @@ export default form.extend({
 
         if (this.options.cols && this.options.cols.length > 0) {
             for (let col of this.options.cols) {
-                let filterValue = this.filterValue(col.name),
+                let filterValue = this.filterValue(col.name, col),
                     filterValues;
                 if (filterValue) {
                     r = _.filter(r, (item) => {
@@ -97,8 +102,9 @@ export default form.extend({
 
         return r;
     },
-    filterValue(name) {
-        return this.model.get(name);
+    filterValue(name, o) {
+        var format = o.filterVal || ((f) => f);
+        return format(this.model.get(name));
     },
     search(e) {
         e && vx.events.stopAll(e);
