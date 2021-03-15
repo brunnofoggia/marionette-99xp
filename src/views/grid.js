@@ -6,6 +6,7 @@ import mnx from "../define";
 import autoUtilEvents from "./autoUtilEvents";
 import template from "marionette-99xp/src/templates/grid.jst";
 import legendTemplate from "marionette-99xp/src/templates/legend.jst";
+import exportTemplate from "marionette-99xp/src/templates/grid_export.jst";
 import filterView from "./filter";
 import listView from "./list";
 import paginationView from "./pagination";
@@ -18,16 +19,16 @@ export default mnx.view.extend(
         _.clone(autoUtilEvents),
         {
             template: template,
+            exportTemplate,
             regions: {
                 filter: ".filter",
                 list: ".list",
                 pagination: ".pagination",
                 legend: ".legend",
             },
-            events: {},
-            //    initialRenderOnState: 'ready',
-            //    renderOnState: 'ready',
-            //    render: mnx.view.prototype.renderSync,
+            events: {
+                "click .export-csv": "exportCSV",
+            },
             onRender() {
                 _.bind(mnx.utils.removeWrapper, this)();
                 vx.utils.when(
@@ -47,7 +48,7 @@ export default mnx.view.extend(
                 this.options.get = () => this.options;
                 this.collection.setSort(this.options.sort);
 
-                this.options.results = () => this.provideResults();
+                this.options.results = () => this.collection.listResults();
                 !("filters" in this.options) && (this.options.filters = {});
 
                 !("pagination" in this.options) &&
@@ -156,13 +157,6 @@ export default mnx.view.extend(
                 }
                 fnCollectionReady();
             },
-            provideResults() {
-                var filtered = this.collection.filterResults(),
-                    sorted = this.collection.sortResults(filtered),
-                    paginated = this.collection.paginate(sorted);
-
-                return paginated;
-            },
             remove() {
                 var selectedRow = this.getRegion(
                     "list"
@@ -237,6 +231,19 @@ export default mnx.view.extend(
             resetCollection(collection) {
                 this.collection = new this.collection.constructor();
                 this.initialize();
+            },
+            exportCSV() {
+                var data = this.collection.exportResults(),
+                    html = this.exportTemplate({
+                        options: {
+                            data,
+                            cols: this.options.cols,
+                        },
+                        _,
+                        App: vx.app(),
+                    });
+
+                vx.utils.openBlob([html], "text/csv", "export.csv");
             },
         }
     )
