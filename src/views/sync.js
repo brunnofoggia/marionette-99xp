@@ -8,6 +8,7 @@ export default mnx.view.extend(
     _.extend({}, _.clone(mnx.utils.viewActions), _.clone(autoUtilEvents), {
         initialRenderOnState: "ready",
         renderOnState: "ready",
+        renderFn: "render",
         render: mnx.view.prototype.renderSync,
         masks: Masks,
         onRender() {
@@ -38,7 +39,7 @@ export default mnx.view.extend(
             // event added to render after loading auth access
             "addAuthAccessRelated" in this && this.addAuthAccessRelated();
             if (!this.fetchRelatedLists() && this.isReady() === true) {
-                this.render();
+                this[this.renderFn]();
             }
 
             return this;
@@ -48,20 +49,20 @@ export default mnx.view.extend(
                 this.model.errorsMap = {};
                 if (this.options.id) {
                     if (this.areReadyModelAndCollection() === true)
-                        this.render();
+                        this[this.renderFn]();
                     else {
-                        //                this.listenToOnce(this.model, this.renderOnState, () => { this.render(); });
+                        //                this.listenToOnce(this.model, this.renderOnState, () => { this[this.renderFn](); });
                         this.listenTo(this.model, this.renderOnState, () => {
-                            this.render();
+                            this[this.renderFn]();
                         });
                     }
                     this.model.fetch();
                 } else {
                     if (this.areReadyModelAndCollection() === true) {
-                        this.render();
+                        this[this.renderFn]();
                     } else {
                         this.listenTo(this.model, this.renderOnState, () => {
-                            this.render();
+                            this[this.renderFn]();
                         });
                     }
                 }
@@ -71,7 +72,7 @@ export default mnx.view.extend(
                 );
             }
 
-            this.on("ready", () => this.render());
+            this.on("ready", () => this[this.renderFn]());
         },
         syncError(model, xhr) {
             this.removeSubmitLoading();
@@ -101,5 +102,6 @@ export default mnx.view.extend(
                 color: "danger text-dark font-weight-bold",
             });
         },
+        afterRender() {},
     })
 );

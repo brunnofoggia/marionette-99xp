@@ -33,20 +33,21 @@ export default sync.extend({
         if (this.model) {
             this.model.errorsMap = {};
             if (this.options.id) {
-                if (this.areReadyModelAndCollection() === true) this.render();
+                if (this.areReadyModelAndCollection() === true)
+                    this[this.renderFn]();
                 else {
                     // note: listenToOnce because when the model has relatedLists associated, they can be used to load data while the form is loaded.
                     this.listenToOnce(this.model, this.renderOnState, () => {
-                        this.render();
+                        this[this.renderFn]();
                     });
                 }
                 this.model.fetch();
             } else {
                 if (this.areReadyModelAndCollection() === true) {
-                    this.render();
+                    this[this.renderFn]();
                 } else {
                     this.listenToOnce(this.model, this.renderOnState, () => {
-                        this.render();
+                        this[this.renderFn]();
                     });
                 }
             }
@@ -56,7 +57,7 @@ export default sync.extend({
             );
         }
 
-        this.on("ready", () => this.render());
+        this.on("ready", () => this[this.renderFn]());
     },
     applyBehaviors($el) {
         this.showRequired($el);
