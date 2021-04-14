@@ -59,7 +59,8 @@ export default mnx.view.extend(
 
                 this.options.pagination.collection = this.options.filters.collection = this.collection;
                 this.collection.cols = this.options.cols;
-                this.collection.filterOnServer = !!this.options.filterOnServer;
+                this.collection.filterOnServer =
+                    this.options.filterOnServer || false;
                 this.collection.limitOnServer = this.options.limitOnServer || 0;
 
                 this.showChildView(
