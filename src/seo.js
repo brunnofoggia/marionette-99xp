@@ -4,8 +4,8 @@ export default {
         // console.log('production detected');
         if (!analytics_id) return;
 
-        console.log("analytics id : ", analytics_id);
-        console.log("ads id : ", ads_id);
+        // console.log("analytics id : ", analytics_id);
+        // console.log("ads id : ", ads_id);
         // <!-- Global site tag (gtag.js) - Google Analytics -->
         window.dataLayer = window.dataLayer || [];
         window.gtag = function () {
@@ -26,7 +26,7 @@ export default {
         // console.log('production detected');
         if (!i) return;
 
-        console.log("tagmanager id : ", i);
+        // console.log("tagmanager id : ", i);
         // <!-- Google Tag Manager -->
         w[l] = w[l] || [];
         w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
@@ -49,7 +49,7 @@ export default {
     loadPixel(pixel_id) {
         if (!pixel_id) return;
 
-        console.log("pixel id : ", pixel_id);
+        // console.log("pixel id : ", pixel_id);
 
         !(function (f, b, e, v, n, t, s) {
             if (f.fbq) return;
