@@ -12,6 +12,7 @@ var model = vx.vmodel.extend({
     sendEmptyFilter: {},
     setCols(o) {
         if (!o) return;
+        this.attributes = {};
         this.cols = o;
         _.each(o, (col) => {
             if (col.default && !this.get(col.name)) {
@@ -33,7 +34,7 @@ export default form.extend({
         submit: "search",
     },
     initialize(o) {
-        this.model = new model();
+        this.model = new model({});
         this.setCols(o.cols);
 
         this.events = _.extend(_.clone(form.prototype.events), this.events);
