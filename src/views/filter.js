@@ -4,26 +4,7 @@ import mnx from "../define";
 import form from "./form";
 
 import template from "marionette-99xp/src/templates/filter.jst";
-
-var model = vx.vmodel.extend({
-    idAttribute: "_filterId",
-    format: {},
-    defaults: {},
-    sendEmptyFilter: {},
-    setCols(o) {
-        if (!o) return;
-        this.attributes = {};
-        this.cols = o;
-        _.each(o, (col) => {
-            if (col.default && !this.get(col.name)) {
-                this.set(col.name, col.default);
-                this.defaults[col.name] = col.default;
-            }
-            col.format && (this.format[col.name] = col.format);
-            this.sendEmptyFilter[col.name] = col.sendEmpty || false;
-        });
-    },
-});
+var model = vx.models.filter;
 
 export default form.extend({
     template: template,

@@ -46,7 +46,7 @@ export default mnx.view.extend(
                 vx.debug.globalify("currentCollection", this.collection);
 
                 this.options.get = () => this.options;
-                this.collection.setSort(this.options.sort);
+                this.options.sort = this.collection.setSort(this.options.sort);
 
                 this.options.results = () => this.collection.listResults();
                 !("filters" in this.options) && (this.options.filters = {});
