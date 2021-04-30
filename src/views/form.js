@@ -309,7 +309,7 @@ export default sync.extend({
     save(e) {
         e && vx.events.stopAll(e);
         if (!this.saveValidation()) {
-            return;
+            return false;
         }
 
         this.beforeSave && this.beforeSave(e);
@@ -322,6 +322,7 @@ export default sync.extend({
 
         this.model.save();
         this.trigger("saved");
+        return true;
     },
     afterSave() {
         this.removeSubmitLoading();
