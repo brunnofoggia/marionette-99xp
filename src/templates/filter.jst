@@ -1,7 +1,8 @@
 <form class='col-12 alert alert-default p-3 mb-4 {{!(options.cols && options.cols.length>0) ? 'd-none' : ''}}' id="{{cid}}">
     <div class="content">
-        {% if(options.cols && options.cols.length>0) { var c = 0; %}
-        {% for(filter of options.cols) if (!('available' in filter) || filter.available) { %}
+        {% var cols = model.displayedCols(); %}
+        {% if(cols && cols.length>0) { var c = 0; %}
+        {% for(filter of cols) if (!('available' in filter) || filter.available) { %}
 
             {% if(c === 0 || (c % 3) === 0) { %}
                 {% if ((c % 3) === 0) { %}</div>{% } %}
