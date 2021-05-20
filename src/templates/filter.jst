@@ -1,7 +1,7 @@
 <form class='col-12 alert alert-default p-3 mb-4 {{!(options.cols && options.cols.length>0) ? 'd-none' : ''}}' id="{{cid}}">
     <div class="content">
         {% if(options.cols && options.cols.length>0) { var c = 0; %}
-        {% for(filter of options.cols) { %}
+        {% for(filter of options.cols) if (!('available' in filter) || filter.available) { %}
 
             {% if(c === 0 || (c % 3) === 0) { %}
                 {% if ((c % 3) === 0) { %}</div>{% } %}
@@ -38,5 +38,6 @@
         {% } %}
         <button type='submit' class='search btn btn-primary text-4'>Pesquisar</button>
         <button type='button' class='clear btn btn-default text-4'>Reiniciar</button>
+        <button type='button' class='config btn btn-default text-4'><i class="fa fa-cog align-text-bottom mr-0"></i></button>
     </div>
 </form>

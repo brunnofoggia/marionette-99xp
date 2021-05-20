@@ -11,6 +11,7 @@ export default form.extend({
     events: {
         "click button.search": "search",
         "click button.clear": "clear",
+        "click button.config": "config",
         "submit form": "save",
         submit: "search",
     },
@@ -37,8 +38,41 @@ export default form.extend({
         e && vx.events.stopAll(e);
         this.trigger("search");
     },
-    clear() {
+    clear(e) {
+        e && vx.events.stopAll(e);
         this.model.attributes = _.clone(this.model.defaults);
         this.render().search();
+    },
+    config(e) {
+        e && vx.events.stopAll(e);
+        var listView = this.parent.getRegion("list").currentView,
+            isDisplayed = (col) => listView.isDisplayed(col),
+            cols = listView.availableCols(),
+            body = `<select id="modal-confirm-message" class="form-control" multiple="multiple" size="${cols.length}" style="overflow: auto;">{o}</select>`,
+            options = [];
+
+        _.each(cols, (col) =>
+            options.push(
+                `<option value="${col.name}" ${
+                    isDisplayed(col) ? 'selected="selected"' : ""
+                }>${col.title}</option>`
+            )
+        );
+        body = body.replace("{o}", options.join(""));
+
+        vx.ux.popup.confirmMessage({
+            title: "Marque quais colunas devem ser exibidas",
+            body,
+            confirm: "Salvar",
+            dataCancel: "Cancelar",
+            confirmClass: "btn-primary text-color-light",
+            cancelClass: "btn-danger text-color-light",
+            confirmValidation: "Preenchimento obrigatório",
+            callback: (val, status, config) => {
+                if (!status) return;
+                listView.setDisplay(val);
+                listView.render();
+            },
+        });
     },
 });

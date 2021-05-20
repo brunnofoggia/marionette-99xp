@@ -42,4 +42,21 @@ export default mnx.view.extend({
 
         this.trigger("orderby", $th.attr("data-name"));
     },
+    isAvailable(col) {
+        return !("available" in col) || col.available;
+    },
+    isDisplayed(col) {
+        return this.isAvailable(col) && (!("display" in col) || col.display);
+    },
+    setDisplay(show) {
+        if (!_.isArray(show) || !show.length) return;
+        _.each(this.options.cols, (col, x) => {
+            this.options.cols[x].display = _.indexOf(show, col.name) >= 0;
+        });
+    },
+    availableCols() {
+        return _.filter(this.options.cols, (col) => {
+            return this.isAvailable(col);
+        });
+    },
 });

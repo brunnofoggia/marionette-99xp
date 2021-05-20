@@ -7,7 +7,7 @@ import autoUtilEvents from "./autoUtilEvents";
 import template from "marionette-99xp/src/templates/grid.jst";
 import legendTemplate from "marionette-99xp/src/templates/legend.jst";
 import exportTemplate from "marionette-99xp/src/templates/grid_export.jst";
-import filterView from "./filter";
+import FilterView from "./filter";
 import listView from "./list";
 import paginationView from "./pagination";
 import authUnit from "./authUnit";
@@ -57,16 +57,16 @@ export default mnx.view.extend(
                     this.collection.pagination[x] = v;
                 });
 
-                this.options.pagination.collection = this.options.filters.collection = this.collection;
+                this.options.pagination.collection =
+                    this.options.filters.collection = this.collection;
                 this.collection.cols = this.options.cols;
                 this.collection.filterOnServer =
                     this.options.filterOnServer || false;
                 this.collection.limitOnServer = this.options.limitOnServer || 0;
 
-                this.showChildView(
-                    "filter",
-                    new filterView(this.options.filters)
-                );
+                var filterView = new FilterView(this.options.filters);
+                filterView.parent = this;
+                this.showChildView("filter", filterView);
                 this.showChildView("list", new listView(this.options));
 
                 "legend" in this.options &&
@@ -151,18 +151,16 @@ export default mnx.view.extend(
                 "addAuthAccessRelated" in this && this.addAuthAccessRelated();
                 this.fetchRelatedLists();
 
-                this.collection.filter = this.getRegion(
-                    "filter"
-                ).currentView.model;
+                this.collection.filter =
+                    this.getRegion("filter").currentView.model;
                 if (this.collection.isReady() !== true) {
                     return this.collection.fetch({ reset: true });
                 }
                 fnCollectionReady();
             },
             remove() {
-                var selectedRow = this.getRegion(
-                    "list"
-                ).currentView.getSelectedRow();
+                var selectedRow =
+                    this.getRegion("list").currentView.getSelectedRow();
                 if (!this.getRegion("list").currentView.getSelectedRow()) {
                     return;
                 }
@@ -191,9 +189,8 @@ export default mnx.view.extend(
                 });
             },
             edit(e) {
-                var selectedRow = this.getRegion(
-                    "list"
-                ).currentView.getSelectedRow();
+                var selectedRow =
+                    this.getRegion("list").currentView.getSelectedRow();
                 if (!selectedRow) {
                     return;
                 }
