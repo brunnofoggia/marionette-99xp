@@ -363,12 +363,11 @@ export default sync.extend({
                 btnCss: "text-light",
                 title: "Salvar",
                 callback: (e) => this.save(e),
-                auth:
-                    "{{moduleName}}/{{typeof id !== 'undefined' && id ? 'update' : 'create'}}",
+                auth: "{{moduleName}}/{{typeof id !== 'undefined' && id ? 'update' : 'create'}}",
             },
             {
                 ico: "arrow-left",
-                title: "Cancelar",
+                title: "Voltar",
                 callback: (e) => this.cancel(e),
             },
         ];

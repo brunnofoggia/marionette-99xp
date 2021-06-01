@@ -16,9 +16,7 @@ export default mnx.view.extend(
 
             if (!this.isReady() === true) return;
             this.applyBehaviors(this.$el);
-
-            this.isReady() === true && this.setActions();
-            this.isReady() === true && this.afterRender && this.afterRender();
+            this.afterRender && this.afterRender();
             this._firstRender = false;
         },
         applyBehaviors($el) {
@@ -102,6 +100,11 @@ export default mnx.view.extend(
                 color: "danger text-dark font-weight-bold",
             });
         },
-        afterRender() {},
+        afterRender() {
+            this.setActions();
+            this.showBreadcrumb();
+            this.customize();
+        },
+        customize() {},
     })
 );

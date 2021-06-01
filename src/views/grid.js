@@ -31,10 +31,11 @@ export default mnx.view.extend(
             },
             onRender() {
                 _.bind(mnx.utils.removeWrapper, this)();
-                vx.utils.when(
-                    () => this.isReady() === true,
-                    () => this.setActions()
-                );
+            },
+            afterRender() {
+                this.setActions();
+                this.showBreadcrumb();
+                this.customize();
             },
             initialize() {
                 this.events = _.extend(
@@ -160,8 +161,8 @@ export default mnx.view.extend(
             },
             remove() {
                 var selectedRow =
-                    this.getRegion("list").currentView.getSelectedRow();
-                if (!this.getRegion("list").currentView.getSelectedRow()) {
+                    this.getRegion("list").currentView.getSelectedRow("cid");
+                if (!selectedRow) {
                     return;
                 }
                 var selectedModel = this.collection.find(
@@ -176,13 +177,32 @@ export default mnx.view.extend(
                     dataCancel: "Cancelar",
                     callback: (status) => {
                         if (status) {
-                            this.listenToOnce(selectedModel, "sync", () => {
-                                this.collection.fetch({ reset: true });
-                                vx.app().ux.toast.add({
-                                    msg: `Registro #${id} removido`,
-                                    color: "danger text-danger",
-                                });
-                            });
+                            this.addLoading("Excluindo registro", "remove");
+                            this.listenToOnce(
+                                [
+                                    selectedModel,
+                                    "sync",
+                                    () => {
+                                        this.removeLoading("remove");
+                                        this.collection.fetch({ reset: true });
+                                        vx.app().ux.toast.add({
+                                            msg: `Registro #${id} removido`,
+                                            color: "danger text-color-light",
+                                        });
+                                    },
+                                ],
+                                [
+                                    selectedModel,
+                                    "error",
+                                    (model, jqXHR, textStatus, errorThrown) => {
+                                        this.removeLoading("remove");
+                                        vx.app().ux.showInfo({
+                                            msg: jqXHR.responseJSON.message,
+                                            color: "danger font-weight-bold text-light",
+                                        });
+                                    },
+                                ]
+                            );
                             selectedModel.destroy();
                         }
                     },
@@ -190,7 +210,7 @@ export default mnx.view.extend(
             },
             edit(e) {
                 var selectedRow =
-                    this.getRegion("list").currentView.getSelectedRow();
+                    this.getRegion("list").currentView.getSelectedRow("cid");
                 if (!selectedRow) {
                     return;
                 }
@@ -206,6 +226,12 @@ export default mnx.view.extend(
             },
             getDefaultActions() {
                 return [
+                    {
+                        ico: "search",
+                        title: "Pesquisar",
+                        callback: (e) =>
+                            $(".filter", this.$el).toggleClass("d-none"),
+                    },
                     {
                         ico: "plus",
                         title: "Cadastrar",
@@ -244,6 +270,7 @@ export default mnx.view.extend(
 
                 vx.utils.openBlob([html], "text/csv", "export.csv");
             },
+            customize() {},
         }
     )
 );

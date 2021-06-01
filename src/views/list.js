@@ -29,9 +29,10 @@ export default mnx.view.extend({
             $("tr", this.$el).removeClass("selected");
         }
     },
-    getSelectedRow() {
+    getSelectedRow(attr = "id") {
         var selected = $("tr.selected", this.$el);
-        if (selected.length > 0) return selected.attr("data-id");
+        if (selected.length > 0)
+            return attr ? selected.attr("data-" + attr) : selected;
         return false;
     },
     orderby(e) {

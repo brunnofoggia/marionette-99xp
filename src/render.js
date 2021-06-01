@@ -25,6 +25,8 @@ obj.view_prototype.isReady = utils.isReady;
 obj.view_prototype.areReadyModelAndCollection =
     utils.areReadyModelAndCollection;
 
+obj.view_prototype.afterReady = function () {};
+obj.view_prototype.afterRendered = function () {};
 obj.view_prototype.renderSync = function () {
     this.addLoading && this.addLoading("", "renderSync");
     var isReadyFn = _.bind(this.isReady ? this.isReady : utils.isReady, this),
@@ -33,10 +35,12 @@ obj.view_prototype.renderSync = function () {
     clearTimeout(this.renderTimer);
     this.renderTimer = null;
     if (isReady === true) {
+        this.afterReady();
         this.removeLoading && this.removeLoading("renderSync", 0);
         this.renderStatus = true;
         // _.bind(obj.view_prototype._render, this)();
         this._render();
+        this.afterRendered();
     } else if (this.renderTimer === null) {
         this.renderTimer = setTimeout(() => {
             vx.debug.log(`interval insure ${isReady[0]} -${isReady[1] || "-"}`);

@@ -79,5 +79,7 @@ mnx.view.prototype.listenToOnce = bbxf.view.prototype.listenToOnce;
 
 // utils
 mnx.utils = utils;
+// hook that makes possible ./utils to use mnx views
+bbxf.mnx = mnx;
 
 export default mnx;

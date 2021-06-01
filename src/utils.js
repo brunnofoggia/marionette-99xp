@@ -1,5 +1,5 @@
 import _ from "underscore-99xp";
-import vx from "backbone-front-99xp";
+import bbxf from "backbone-front-99xp";
 
 import uxLoading from "front-99xp/src/ux/loading";
 import Masks from "front-99xp/src/masks/igorescobar";
@@ -114,10 +114,78 @@ obj.viewActions = {
         var actionData = this;
         return _.template(tpl)(actionData);
     },
+    actionsOptions: {
+        addSpanForTitle: true,
+        addClass: "",
+    },
+    getActionsOptions(actions) {
+        return _.extend(this.actionsOptions || {}, { context: this });
+    },
     showActions(actions = null) {
-        typeof vx.app().getView() === "object" &&
-            "setActions" in vx.app().getView() &&
-            vx.app().getView().setActions(actions, this);
+        if ("actions" in this.regions) {
+            return this.showActionsInside(actions);
+        }
+        return this.showActionsOnApp(actions);
+    },
+    showActionsOnApp(actions = null) {
+        typeof bbxf.app().getView() === "object" &&
+            "setActions" in bbxf.app().getView() &&
+            bbxf
+                .app()
+                .getView()
+                .setActions(actions, this.getActionsOptions(actions));
+    },
+    showActionsInside(actions = null) {
+        const ActionBar = bbxf.mnx.views.actionBar;
+        const actionBar = new ActionBar();
+        this.showChildView(
+            "actions",
+            actionBar.setActions(actions, this.getActionsOptions(actions))
+        );
+        this.customizeActionsInside(actions);
+        $(".actions", this.$el).removeClass("d-none");
+    },
+    customizeActionsInside(actions = null) {
+        $(".actions", this.$el).addClass("text-right mb-4");
+    },
+    breadcrumbText: "",
+    breadcrumbTag: "h2",
+    getBreadcrumbText() {
+        return this.breadcrumbText || "";
+    },
+    getBreadcrumbTag() {
+        return this.breadcrumbTag || "div";
+    },
+    showBreadcrumb() {
+        var text = this.getBreadcrumbText();
+        if (this.getBreadcrumbContainer()) {
+            return this.showBreadcrumbInside(text);
+        }
+        return this.showBreadcrumbOnApp(text);
+    },
+    getBreadcrumbContainer() {
+        return $(".breadcrumb-container", this.$el).length
+            ? $(".breadcrumb-container", this.$el)
+            : null;
+    },
+    showBreadcrumbOnApp(text = "") {
+        bbxf.app().getView() === "object" &&
+            "showBreadcrumb" in bbxf.app().getView() &&
+            bbxf.app().getView().showBreadcrumb(text);
+    },
+    showBreadcrumbInside(text = "") {
+        var $breadcrumb = this.getBreadcrumbContainer();
+        $(".breadcrumb-text", $breadcrumb).remove();
+        $(`<${this.getBreadcrumbTag()} class="col-12 col-lg">`)
+            .addClass("breadcrumb-text")
+            .html(text)
+            .prependTo($breadcrumb);
+        this.customizeBreadcrumbInside(text);
+        $breadcrumb.removeClass("d-none");
+    },
+    customizeBreadcrumbInside(text = "") {
+        var $breadcrumb = this.getBreadcrumbContainer();
+        $breadcrumb.addClass("mb-4");
     },
 };
 
