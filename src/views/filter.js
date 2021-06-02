@@ -33,6 +33,15 @@ export default form.extend({
                 ? this.masks[$(el).attr("data-mask")]($(el))
                 : $(el).mask($(el).attr("data-mask"));
         });
+        this.setFiltersSizeClass();
+    },
+    setFiltersSizeClass() {
+        this.$el
+            .parent()
+            .addClass(
+                "filter-lines-" +
+                    Math.ceil(this.model.displayedCols().length / 3)
+            );
     },
     search(e) {
         e && vx.events.stopAll(e);

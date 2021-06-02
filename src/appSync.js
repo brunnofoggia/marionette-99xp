@@ -62,9 +62,7 @@ export default App.extend({
         var AppView = this.options.AppView;
         this.appView = new AppView({ App: this });
 
-        this._loadId = vx.ux.loading.add(
-            vx.environment() < vx.constants.env.staging ? "App is loading" : ""
-        );
+        this._loadId = vx.ux.loading.add("");
         vx.debug.globalify("app", this);
         // remove loading somente quando a appview estiver exibida
         vx.utils.when(

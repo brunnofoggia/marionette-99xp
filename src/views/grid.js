@@ -230,7 +230,7 @@ export default mnx.view.extend(
                         ico: "search",
                         title: "Pesquisar",
                         callback: (e) =>
-                            $(".filter", this.$el).toggleClass("d-none"),
+                            $(".filter", this.$el).toggleClass("search-on"),
                     },
                     {
                         ico: "plus",

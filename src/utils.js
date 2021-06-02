@@ -146,7 +146,10 @@ obj.viewActions = {
         $(".actions", this.$el).removeClass("d-none");
     },
     customizeActionsInside(actions = null) {
-        $(".actions", this.$el).addClass("text-right mb-4");
+        var $actions = $(".actions", this.$el);
+        $actions.addClass("text-right");
+        !$actions.parents(".breadcrumb-container:first").length &&
+            $actions.addClass("mb-4");
     },
     breadcrumbText: "",
     breadcrumbTag: "h2",
