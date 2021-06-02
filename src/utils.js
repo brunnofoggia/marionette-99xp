@@ -116,7 +116,7 @@ obj.viewActions = {
     },
     actionsOptions: {
         addSpanForTitle: true,
-        addClass: "",
+        addClass: "text-2",
     },
     getActionsOptions(actions) {
         return _.extend(this.actionsOptions || {}, { context: this });

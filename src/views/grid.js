@@ -224,6 +224,8 @@ export default mnx.view.extend(
 
                 vx.router.navigate(route, { trigger: true });
             },
+            createUrl: "/{{moduleDir || ''}}{{modulePath}}/s/form",
+            updateUrl: "/{{moduleDir || ''}}{{modulePath}}/s/form/pk",
             getDefaultActions() {
                 return [
                     {
@@ -235,13 +237,13 @@ export default mnx.view.extend(
                     {
                         ico: "plus",
                         title: "Cadastrar",
-                        navigate: "/{{modulePath}}/s/form",
+                        navigate: this.createUrl,
                         auth: "{{modulePath}}/create",
                     },
                     {
                         ico: "pencil-alt",
                         title: "Alterar",
-                        route: "/{{modulePath}}/s/form/pk",
+                        route: this.updateUrl,
                         callback: (e) => this.edit(e),
                         auth: "{{modulePath}}/update",
                     },
