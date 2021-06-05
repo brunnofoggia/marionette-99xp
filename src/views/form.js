@@ -26,6 +26,12 @@ export default sync.extend({
         "blur input,select,textarea": "setBlurBehavior",
     },
     initialize() {
+        if (!this.model && this.Model) {
+            var Model = this.Model;
+            this.model = new Model({
+                id: 'id' in this.options ? this.options.id : null,
+            });
+        }
         this.events = _.extend(_.clone(sync.prototype.events), this.events);
         _.bind(sync.prototype.initialize, this)();
     },
