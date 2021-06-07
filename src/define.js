@@ -52,6 +52,10 @@ mnx.view.prototype.preinitialize = function () {
 for (let x in render["view_prototype"]) {
     mnx.view.prototype[x] = render["view_prototype"][x];
 }
+if (render.renderer) {
+    mnx.view.setRenderer(render.renderer);
+    mnx.cview.setRenderer(render.renderer);
+}
 
 // security
 mnx.view.Shield = mnx.cview.Shield = bbxf.view.Shield;

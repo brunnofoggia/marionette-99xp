@@ -8,6 +8,7 @@ import popup from "./popup";
 import "jquery-mask-plugin";
 
 export default popup.extend({
+    ejs: false,
     templateBody: template,
     regions: {
         header: ".modal-header",

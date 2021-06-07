@@ -5,6 +5,7 @@ import mnx from "../define";
 import template from "marionette-99xp/src/templates/list.jst";
 
 export default mnx.view.extend({
+    ejs: false,
     template: template,
     events: {
         "click .item": "selectRow",

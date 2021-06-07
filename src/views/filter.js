@@ -7,6 +7,7 @@ import template from "marionette-99xp/src/templates/filter.jst";
 var model = vx.models.filter;
 
 export default form.extend({
+    ejs: false,
     template: template,
     events: {
         "click button.search": "search",

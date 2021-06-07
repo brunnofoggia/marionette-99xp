@@ -1,6 +1,7 @@
 import _ from "underscore-99xp";
 import vx from "backbone-front-99xp";
 import Mn from "backbone.marionette";
+import ejs from "ejs";
 import utils from "./utils";
 
 var obj = {
@@ -12,6 +13,7 @@ var obj = {
     collection_prototype: {},
     view_prototype: {},
     app_prototype: {},
+    fn: null,
 };
 
 obj.view_prototype._render = Mn.View.prototype.render;
@@ -50,11 +52,6 @@ obj.view_prototype.renderSync = function () {
     return this;
 };
 
-obj.view_prototype.templates = {};
-obj.view_prototype.renderPartial = function (viewName, opts = {}) {
-    return this.templates[viewName](_.extend(this.serializeData(), opts));
-};
-
 obj.view_prototype.serializeData = function () {
     return {
         App: vx.app(),
@@ -69,6 +66,24 @@ obj.view_prototype.serializeData = function () {
         cid: this.cid,
         renderPartial: (viewName, opts) => this.renderPartial(viewName, opts),
     };
+};
+
+obj.renderer = function (template, data) {
+    if (this.ejs && !_.isFunction(template)) {
+        return ejs.render(template, data);
+    }
+    var compiled = _.isFunction(template) ? template : _.template(template);
+    return compiled(data);
+};
+
+obj.view_prototype.templates = {};
+obj.view_prototype.ejs = true;
+obj.view_prototype.renderPartial = function (viewName, opts = {}) {
+    const renderer = _.bind(obj.renderer, this);
+    return renderer(
+        this.templates[viewName],
+        _.extend(this.serializeData(), opts)
+    );
 };
 
 export default obj;

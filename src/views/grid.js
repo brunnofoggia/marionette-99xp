@@ -18,6 +18,7 @@ export default mnx.view.extend(
         _.clone(mnx.utils.viewLoading),
         _.clone(autoUtilEvents),
         {
+            ejs: false,
             template: template,
             exportTemplate,
             regions: {

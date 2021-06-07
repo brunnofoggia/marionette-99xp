@@ -4,6 +4,7 @@ import mnx from "../define";
 import template from "../templates/actionBar.jst";
 
 export default mnx.view.extend({
+    ejs: false,
     template: template,
     setActions(actions, o = {}) {
         this.options.actions = actions;
