@@ -64,6 +64,7 @@ obj.view_prototype.serializeData = function () {
         model: this.model,
         collection: this.collection,
         relatedLists: this.relatedLists || {},
+        data: this.data || {},
         options: this.options,
         cid: this.cid,
         renderPartial: (viewName, opts) => this.renderPartial(viewName, opts),
