@@ -259,4 +259,10 @@ obj.viewScroll = Object.freeze({
     },
 });
 
+obj.log = {
+    log(s) {
+        !!this.logs && bbxf.debug.log(s);
+    },
+};
+
 export default obj;

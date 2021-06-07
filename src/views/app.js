@@ -87,35 +87,55 @@ export default sync.extend({
     isCSSLinkLoaded(link) {
         return Boolean(link.sheet);
     },
+    startAfterAttached() {
+        vx.utils.when(
+            () => {
+                vx.app().log(
+                    "A-1 waiting appViewAttached. - " +
+                        !!vx.app().appViewAttached
+                );
+                return vx.app().appViewAttached;
+            },
+            () => this.start(),
+            10
+        );
+    },
     start() {
-        vx.debug.log("appview start called");
+        vx.app().log("C-0 appview start called and app.execute triggered");
         this.listenTo(vx.app(), "appready", () => {
             this.afterAppReadyRender();
         });
+
         vx.app().execute();
+        this.startToLoadOldAssets();
     },
-    afterAppReadyRender() {
+    startToLoadOldAssets() {
         if (!this.options.old_assets) {
-            vx.debug.log("skipping old assets");
+            vx.app().log("D-0 skipping old assets");
             return this.setReady();
         }
-        vx.debug.log("loading old assets");
+        vx.app().log("D-0 loading old assets");
         return this.loadOldAssets(this.options.old_assets, () =>
             this.setReady()
         );
     },
+    afterAppReadyRender() {
+        // testing loadoldassets on start()
+        // this.startToLoadOldAssets();
+    },
     amIVisible() {
-        return $("*:last", this.$el).is(":visible");
+        return this.$el.is(":visible") && $("*:last", this.$el).is(":visible");
     },
     afterVisible() {
         this.isTrullyVisible = true;
         this.afterReady();
     },
     setReady() {
-        vx.debug.log("loaded old assets");
+        vx.app().log("D-1 loaded old assets");
         vx.utils.when(
             () => this.amIVisible(),
-            () => this.afterVisible()
+            () => this.afterVisible(),
+            30
         );
     },
     afterReady() {},

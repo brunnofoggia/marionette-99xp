@@ -8,6 +8,7 @@ import seo from "./seo";
 export default Mn.Application.extend(
     _.extend(
         {
+            logs: true,
             router: vx.router,
             navigationData: {},
             navigate(u, o = {}) {
@@ -121,6 +122,7 @@ export default Mn.Application.extend(
                 return $("header").height();
             },
         },
+        _.clone(utils.log),
         _.clone(utils.viewLoading),
         _.clone(utils.viewScroll),
         _.clone(seo)

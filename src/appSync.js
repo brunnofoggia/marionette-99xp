@@ -34,7 +34,9 @@ export default App.extend({
 
         if (isReady === true) {
             this.executed = 2;
+            this.log("C-1 app isready and was executed ! (appready triggered)");
             this.trigger("appready");
+            this.log("C-2 router started");
             this.startRouter();
         }
 
@@ -51,11 +53,14 @@ export default App.extend({
         vx.debug.globalify("$", $);
         vx.debug.globalify("vx", vx);
 
-        // listening false used to do not reaload app if any related list is reloaded by some view or model
+        // listening false used to do not reload app if any related list is reloaded by some view or model
         // fetch is here instead of being on initialize because appview can add global dependencies
         if (!this.fetchRelatedLists({ listening: false })) {
             this.triggerReady();
         }
+    },
+    allDone() {
+        return this.executed === 9;
     },
     // primeiro metodo executado apos o app.start do marionette
     onStart() {
@@ -67,33 +72,46 @@ export default App.extend({
         // remove loading somente quando a appview estiver exibida
         vx.utils.when(
             () => {
-                vx.debug.log("waiting appView.isTrullyVisible");
+                this.log("Z waiting appView.isTrullyVisible");
                 return this.appView.isTrullyVisible;
             },
             () => {
                 vx.ux.loading.remove(this._loadId);
-            }
+                this.executed = 9;
+            },
+            50
         );
 
         this.appView.$el.hide();
         vx.utils.when(
-            () =>
-                typeof this.appView.template == "function" &&
-                (!this.appView.isReady || this.appView.isReady() === true),
             () => {
-                vx.debug.log("showview set");
+                this.log("B-0 waiting appview.template and appview.isready");
+                return (
+                    _.indexOf(
+                        ["function", "string"],
+                        typeof this.appView.template
+                    ) !== -1 &&
+                    (!this.appView.isReady || this.appView.isReady() === true)
+                );
+            },
+            () => {
+                this.log("B-1 showview set");
                 // acontece antes do App.execute
                 this.showView(this.appView);
                 this.appViewAttached = true;
-            }
+            },
+            30
         );
     },
     showContent(view) {
-        vx.debug.log("showcontent called");
+        this.log("F-0 showcontent called");
         vx.utils.when(
-            () => this.getView(),
             () => {
-                vx.debug.log("showcontent executed");
+                this.log("F-1 waiting view");
+                return this.getView();
+            },
+            () => {
+                this.log("F-2 showcontent executed");
                 this.isLoggedEvents();
                 var viewObj = typeof view === "object" ? view : null;
 
@@ -101,11 +119,12 @@ export default App.extend({
                     this.getView().getRegion("content").show(viewObj);
 
                     if (!this.appView.$el.is(":visible")) {
-                        vx.debug.log("show appview");
+                        this.log("F-3 show appview");
                         this.appView.$el.show();
                     }
                 }
-            }
+            },
+            30
         );
     },
 });
