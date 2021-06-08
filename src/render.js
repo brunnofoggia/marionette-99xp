@@ -68,9 +68,14 @@ obj.view_prototype.serializeData = function () {
     };
 };
 
+const ejsConfig = { strict: false };
 obj.renderer = function (template, data) {
     if (this.ejs && !_.isFunction(template)) {
-        return ejs.render(template, data);
+        var config = _.defaults(
+            this.ejsConfig || {},
+            vx.app().ejsConfig || ejsConfig
+        );
+        return ejs.render(template, data, config);
     }
     var compiled = _.isFunction(template) ? template : _.template(template);
     return compiled(data);
