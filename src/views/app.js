@@ -5,6 +5,7 @@ import sync from "./sync";
 export default sync.extend({
     el: ".body",
     wrapperRemoved: true, // for sync view to work as appview
+    removeWrapper() {}, // for sync view to work as appview
     isTrullyVisible: false, // used to run events after app is visible on screen
     regions: {
         content: ".content",

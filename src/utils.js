@@ -9,7 +9,18 @@ var obj = {
 };
 
 obj.removeWrapper = function () {
-    if ("wrapperRemoved" in this) return this;
+    if ("wrapperRemoved" in this) return this; // possible implementation to solve some confusion back at the time
+    // Get rid of that pesky wrapping-div.
+    // Assumes 1 child element present in template.
+    this.$el = this.$el.children();
+    // Unwrap the element to prevent infinitely
+    // nesting elements during re-render.
+    this.$el.unwrap();
+    this.setElement(this.$el);
+    this.wrapperRemoved = true;
+};
+
+obj.removeWrapper2 = function () {
     // Get rid of that pesky wrapping-div.
     // Assumes 1 child element present in template.
     this.$el = this.$el.children();

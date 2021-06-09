@@ -1,5 +1,6 @@
 import _ from "underscore-99xp";
 import vx from "backbone-front-99xp";
+import mnx from "../define";
 import sync from "./sync";
 
 export default sync.extend({
@@ -10,6 +11,9 @@ export default sync.extend({
         info: [],
         warning: [],
         danger: [],
+    },
+    removeWrapper() {
+        _.bind(mnx.utils.removeWrapper, this)();
     },
     gobackUrl: "../lista",
     _saveEvents: false,
@@ -29,7 +33,7 @@ export default sync.extend({
         if (!this.model && this.Model) {
             var Model = this.Model;
             this.model = new Model({
-                id: 'id' in this.options ? this.options.id : null,
+                id: "id" in this.options ? this.options.id : null,
             });
         }
         this.events = _.extend(_.clone(sync.prototype.events), this.events);

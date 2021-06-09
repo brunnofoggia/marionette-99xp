@@ -13,7 +13,12 @@ export default mnx.view.extend({
         "change select.goto": "goto",
     },
     initialize() {},
-    onRender: mnx.utils.removeWrapper,
+    onRender() {
+        this.removeWrapper();
+    },
+    removeWrapper() {
+        _.bind(mnx.utils.removeWrapper, this)();
+    },
     goto(e) {
         this.options.collection.pagination.page = parseInt(
             $("option:selected", e.currentTarget).val(),

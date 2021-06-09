@@ -2,7 +2,7 @@
     "name": "marionette-99xp",
     "description": "-",
     "author": "Bruno Foggia",
-    "version": "0.44.2-alpha",
+    "version": "0.44.4-alpha",
     "browser": "src/marionette.js",
     "main": "src/marionette.js",
     "module": "src/marionette.js",

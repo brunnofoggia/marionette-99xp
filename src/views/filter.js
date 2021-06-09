@@ -27,7 +27,7 @@ export default form.extend({
         this.model.setCols(o);
     },
     onRender() {
-        _.bind(mnx.utils.removeWrapper, this)();
+        _.bind(mnx.utils.removeWrapper2, this)();
         $('[data-toggle="tooltip"]', this.$el).tooltip();
         $("[data-mask]", this.$el).each((x, el) => {
             $(el).attr("data-mask") in this.masks

@@ -31,7 +31,10 @@ export default mnx.view.extend(
                 "click .export-csv": "exportCSV",
             },
             onRender() {
-                _.bind(mnx.utils.removeWrapper, this)();
+                this.removeWrapper();
+            },
+            removeWrapper() {
+                _.bind(mnx.utils.removeWrapper2, this)();
             },
             afterRender() {
                 this.setActions();

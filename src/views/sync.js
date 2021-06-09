@@ -12,12 +12,15 @@ export default mnx.view.extend(
         render: mnx.view.prototype.renderSync,
         masks: Masks,
         onRender() {
-            _.bind(mnx.utils.removeWrapper, this)();
+            this.removeWrapper();
 
             if (!this.isReady() === true) return;
             this.applyBehaviors(this.$el);
             this.afterRender && this.afterRender();
             this._firstRender = false;
+        },
+        removeWrapper() {
+            _.bind(mnx.utils.removeWrapper2, this)();
         },
         applyBehaviors($el) {
             vx.utils.when(
