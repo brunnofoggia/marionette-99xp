@@ -348,10 +348,6 @@ export default sync.extend({
         this.goback();
     },
     goback(saved) {
-        var urlTpl =
-                saved && this.goNextUrl ? this.goNextUrl : this.gobackUrl || "",
-            url = _.template(urlTpl)({ model: this.model });
-
         saved &&
             this.savedInfo &&
             vx.app().ux.toast.add({
@@ -359,18 +355,36 @@ export default sync.extend({
                 color: "info text-dark",
             });
 
-        if (url) {
-            if (/\.\.\//.test(url)) {
-                var baseUrl = window.location.pathname
-                    .replace(/\/s\/.*/, "/s")
-                    .split("/");
-                baseUrl.push(url.replace("../", ""));
-                url = baseUrl.join("/");
-            }
+        var urlTpl =
+            saved && this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
 
-            return vx.router.navigate(url, { trigger: true });
+        if (urlTpl) {
+            return this.goto(urlTpl);
         }
         return Backbone.history.history.back();
+    },
+    goNext() {
+        var urlTpl = this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
+        if (urlTpl) {
+            return this.goto(urlTpl);
+        }
+    },
+    goto(urlTpl) {
+        var url = _.template(urlTpl)({ model: this.model });
+
+        url = this.formatRelativeUrl(url);
+        return vx.router.navigate(url, { trigger: true });
+    },
+    formatRelativeUrl(url) {
+        if (/\.\.\//.test(url)) {
+            var baseUrl = window.location.pathname
+                .replace(/\/s\/.*/, "/s")
+                .split("/");
+            baseUrl.push(url.replace("../", ""));
+            url = baseUrl.join("/");
+        }
+
+        return url;
     },
     getDefaultActions() {
         return [
