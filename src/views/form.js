@@ -16,6 +16,8 @@ export default sync.extend({
         _.bind(mnx.utils.removeWrapper, this)();
     },
     gobackUrl: "../lista",
+    goNextUrl: "",
+    savedInfo: "Registro #{{model.get('id')}} salvo com sucesso",
     _saveEvents: false,
     events: {
         "change input": "setValue",
@@ -30,14 +32,17 @@ export default sync.extend({
         "blur input,select,textarea": "setBlurBehavior",
     },
     initialize() {
+        this.modelInit();
+        this.events = _.extend(_.clone(sync.prototype.events), this.events);
+        _.bind(sync.prototype.initialize, this)();
+    },
+    modelInit() {
         if (!this.model && this.Model) {
             var Model = this.Model;
             this.model = new Model({
                 id: "id" in this.options ? this.options.id : null,
             });
         }
-        this.events = _.extend(_.clone(sync.prototype.events), this.events);
-        _.bind(sync.prototype.initialize, this)();
     },
     renderListener() {
         if (this.model) {
@@ -343,15 +348,18 @@ export default sync.extend({
         this.goback();
     },
     goback(saved) {
+        var urlTpl =
+                saved && this.goNextUrl ? this.goNextUrl : this.gobackUrl || "",
+            url = _.template(urlTpl)({ model: this.model });
+
         saved &&
+            this.savedInfo &&
             vx.app().ux.toast.add({
-                msg: "Registro #" + this.model.id + " salvo com sucesso",
+                msg: _.template(this.savedInfo)({ model: this.model }),
                 color: "info text-dark",
             });
 
-        if ("gobackUrl" in this) {
-            var url = this.gobackUrl;
-
+        if (url) {
             if (/\.\.\//.test(url)) {
                 var baseUrl = window.location.pathname
                     .replace(/\/s\/.*/, "/s")
@@ -359,11 +367,10 @@ export default sync.extend({
                 baseUrl.push(url.replace("../", ""));
                 url = baseUrl.join("/");
             }
-        }
 
-        !("gobackUrl" in this)
-            ? Backbone.history.history.back()
-            : vx.router.navigate(url, { trigger: true });
+            return vx.router.navigate(url, { trigger: true });
+        }
+        return Backbone.history.history.back();
     },
     getDefaultActions() {
         return [
