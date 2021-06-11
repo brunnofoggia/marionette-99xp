@@ -9,7 +9,7 @@ var obj = {
 };
 
 obj.removeWrapper = function () {
-    if ("wrapperRemoved" in this) return this; // possible implementation to solve some confusion back at the time
+    if ("wrapperRemoved" in this) return this; // this is very important addition made by my oldself. do not use removewrapper2 unless you are 120% sure of it
     // Get rid of that pesky wrapping-div.
     // Assumes 1 child element present in template.
     this.$el = this.$el.children();
