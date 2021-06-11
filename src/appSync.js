@@ -67,7 +67,7 @@ export default App.extend({
         var AppView = this.options.AppView;
         this.appView = new AppView({ App: this });
 
-        this._loadId = vx.ux.loading.add("");
+        this.addStartLoading();
         vx.debug.globalify("app", this);
         // remove loading somente quando a appview estiver exibida
         vx.utils.when(
@@ -76,7 +76,7 @@ export default App.extend({
                 return this.appView.isTrullyVisible;
             },
             () => {
-                vx.ux.loading.remove(this._loadId);
+                this.removeStartLoading();
                 this.executed = 9;
             },
             50
@@ -102,6 +102,12 @@ export default App.extend({
             },
             30
         );
+    },
+    addStartLoading() {
+        this._loadId = vx.ux.loading.add("");
+    },
+    removeStartLoading() {
+        vx.ux.loading.remove(this._loadId);
     },
     showContent(view) {
         this.log("F-0 showcontent called");
