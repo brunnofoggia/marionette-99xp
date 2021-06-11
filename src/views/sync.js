@@ -20,7 +20,7 @@ export default mnx.view.extend(
             this._firstRender = false;
         },
         removeWrapper() {
-            _.bind(mnx.utils.removeWrapper2, this)();
+            _.bind(mnx.utils.removeWrapper, this)();
         },
         applyBehaviors($el) {
             vx.utils.when(

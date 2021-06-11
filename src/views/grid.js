@@ -34,7 +34,7 @@ export default mnx.view.extend(
                 this.removeWrapper();
             },
             removeWrapper() {
-                _.bind(mnx.utils.removeWrapper2, this)();
+                _.bind(mnx.utils.removeWrapper, this)();
             },
             afterRender() {
                 this.setActions();
