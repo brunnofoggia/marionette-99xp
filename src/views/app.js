@@ -101,6 +101,7 @@ export default sync.extend({
             10
         );
     },
+    loadOldAssetsAtStart: true,
     start() {
         vx.app().log("C-0 appview start called and app.execute triggered");
         this.listenTo(vx.app(), "appready", () => {
@@ -108,7 +109,7 @@ export default sync.extend({
         });
 
         vx.app().execute();
-        this.startToLoadOldAssets();
+        this.loadOldAssetsAtStart && this.startToLoadOldAssets();
     },
     startToLoadOldAssets() {
         if (!this.options.old_assets) {
@@ -122,7 +123,7 @@ export default sync.extend({
     },
     afterAppReadyRender() {
         // testing loadoldassets on start()
-        // this.startToLoadOldAssets();
+        !this.loadOldAssetsAtStart && this.startToLoadOldAssets();
     },
     amIVisible() {
         return this.$el.is(":visible") && $("*:last", this.$el).is(":visible");
