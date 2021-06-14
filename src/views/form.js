@@ -348,12 +348,7 @@ export default sync.extend({
         this.goback();
     },
     goback(saved) {
-        saved &&
-            this.savedInfo &&
-            vx.app().ux.toast.add({
-                msg: _.template(this.savedInfo)({ model: this.model }),
-                color: "info text-dark",
-            });
+        saved && this.showSavedInfo();
 
         var urlTpl =
             saved && this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
@@ -362,6 +357,13 @@ export default sync.extend({
             return this.goto(urlTpl);
         }
         return Backbone.history.history.back();
+    },
+    showSavedInfo() {
+        this.savedInfo &&
+            vx.app().ux.toast.add({
+                msg: _.template(this.savedInfo)({ model: this.model }),
+                color: "info text-dark",
+            });
     },
     goNext() {
         var urlTpl = this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
