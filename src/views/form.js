@@ -80,7 +80,8 @@ export default sync.extend({
     },
     getElValue($el) {
         return $el.is("select")
-            ? $("option:selected", $el).val()
+            ? $("option:selected", $el).attr("data-value") ||
+                  $("option:selected", $el).val()
             : $el.is("input:checkbox") || $el.is("input:radio")
             ? $el.is(":checked")
                 ? $el.val()
