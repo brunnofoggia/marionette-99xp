@@ -9,6 +9,7 @@ var model = vx.models.filter;
 export default form.extend({
     ejs: false,
     template: template,
+    renderWithErrorMsg: false,
     events: {
         "click button.search": "search",
         "click button.clear": "clear",

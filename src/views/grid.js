@@ -99,6 +99,7 @@ export default mnx.view.extend(
                     this.afterRender && this.afterRender();
                 };
                 this.listenTo(this.collection, "ready", fnCollectionReady);
+                this.listenTo(this.collection, "error", fnCollectionReady);
 
                 // ao pesquisar, executa gofirst que por sua vez demanda o re-render
                 this.listenTo(

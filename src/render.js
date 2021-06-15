@@ -19,24 +19,31 @@ var obj = {
 obj.view_prototype._render = Mn.View.prototype.render;
 
 obj.view_prototype.waitToRender = false;
+obj.view_prototype.renderWithError = true;
 obj.view_prototype.renderStatus = false;
 obj.view_prototype.renderTimer = null;
 obj.view_prototype._firstRender = true;
 
 obj.view_prototype.isReady = utils.isReady;
+obj.view_prototype.isWrong = utils.isWrong;
 obj.view_prototype.areReadyModelAndCollection =
     utils.areReadyModelAndCollection;
+obj.view_prototype.areWrongModelOrCollection = utils.areWrongModelOrCollection;
 
 obj.view_prototype.afterReady = function () {};
 obj.view_prototype.afterRendered = function () {};
 obj.view_prototype.renderSync = function () {
     this.addLoading && this.addLoading("", "renderSync");
     var isReadyFn = _.bind(this.isReady ? this.isReady : utils.isReady, this),
-        isReady = isReadyFn();
+        isWrong = this.isWrong(),
+        isReady = (this.renderWithError && isWrong !== false) || isReadyFn();
+
+    console.log("renderSync", isWrong, isWrong !== false, isReady);
 
     clearTimeout(this.renderTimer);
     this.renderTimer = null;
     if (isReady === true) {
+        isWrong !== false && this.showRenderWithErrorMsg();
         this.afterReady();
         this.removeLoading && this.removeLoading("renderSync", 0);
         this.renderStatus = true;
@@ -50,6 +57,17 @@ obj.view_prototype.renderSync = function () {
         }, 500);
     }
     return this;
+};
+
+obj.view_prototype.renderWithErrorTitle = "Informação";
+obj.view_prototype.renderWithErrorMsg =
+    "Houve um problema ao consultar os dados. Tente novamente.";
+obj.view_prototype.showRenderWithErrorMsg = function () {
+    if (!this.renderWithErrorMsg) return;
+    var title = this.renderWithErrorTitle,
+        msg = this.renderWithErrorMsg;
+
+    vx.App().ux.popup.info({ title: title, msg: msg });
 };
 
 obj.view_prototype.serializeData = function () {

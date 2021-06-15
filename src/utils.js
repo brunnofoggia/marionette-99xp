@@ -75,6 +75,39 @@ obj.isReady = function () {
     // return false;
 };
 
+obj.areWrongModelOrCollection = function () {
+    var s = false;
+    if (this.model && this.model.isWrong() !== false) {
+        if (this.model.infoRelatedReady) s = [-31, this.model.infoRelatedReady];
+        s = -3;
+    }
+    if (this.collection && this.collection.isWrong() !== false) {
+        if (this.collection.infoRelatedReady)
+            s = [-41, this.collection.infoRelatedReady];
+        if (this.collection.infoModelsReady)
+            s = [-42, this.collection.infoModelsReady];
+        s = -4;
+    }
+    return s;
+};
+
+obj.isWrong = function () {
+    var s = false,
+        areWrongModelOrCollection = this.areWrongModelOrCollection();
+
+    if (areWrongModelOrCollection !== false) s = areWrongModelOrCollection;
+    else if (
+        "isAnyRelatedWrong" in this &&
+        this.isAnyRelatedWrong() !== false
+    ) {
+        if (this.infoRelatedReady) s = [-51, this.infoRelatedReady];
+        s = -5;
+    }
+    typeof s === "number" && (s = [s]);
+
+    return s;
+};
+
 // actions
 obj.viewActions = {
     getDefaultActions() {

@@ -5,6 +5,7 @@ import template from "marionette-99xp/src/templates/pagination.jst";
 
 export default mnx.view.extend({
     template: template,
+    renderWithErrorMsg: false,
     events: {
         "click button.first": "gofirst",
         "click button.prev": "goprev",
