@@ -113,18 +113,22 @@ export default mnx.view.extend(
             },
             initializeCollectionListeners() {
                 var fnCollectionReady = () => {
-                    this.getRegion("filter").currentView &&
-                        this.getRegion("filter").currentView.render();
-                    this.getRegion("list").currentView &&
-                        this.getRegion("list").currentView.render();
-                    this.getRegion("pagination").currentView &&
-                        this.getRegion("pagination").currentView.render();
+                        this.getRegion("filter").currentView &&
+                            this.getRegion("filter").currentView.render();
+                        this.getRegion("list").currentView &&
+                            this.getRegion("list").currentView.render();
+                        this.getRegion("pagination").currentView &&
+                            this.getRegion("pagination").currentView.render();
 
-                    this.removeSubmitLoading();
-                    this.afterRender && this.afterRender();
-                };
+                        this.removeSubmitLoading();
+                        this.afterRender && this.afterRender();
+                    },
+                    fnCollectionError = (c, xhr, o) => {
+                        vx.showAjaxError(xhr);
+                        fnCollectionReady();
+                    };
                 this.listenTo(this.collection, "ready", fnCollectionReady);
-                this.listenTo(this.collection, "error", fnCollectionReady);
+                this.listenTo(this.collection, "error", fnCollectionError);
             },
             initializeSearchListener() {
                 // ao pesquisar, executa gofirst que por sua vez demanda o re-render
