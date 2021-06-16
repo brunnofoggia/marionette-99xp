@@ -9,7 +9,7 @@ import legendTemplate from "marionette-99xp/src/templates/legend.jst";
 import exportTemplate from "marionette-99xp/src/templates/grid_export.jst";
 import FilterView from "./filter";
 import listView from "./list";
-import paginationView from "./pagination";
+import PaginationView from "./pagination";
 import authUnit from "./authUnit";
 
 export default mnx.view.extend(
@@ -42,14 +42,28 @@ export default mnx.view.extend(
                 this.customize();
             },
             initialize() {
+                this.initializeSetEvents();
+                this.setGrid();
+                vx.debug.globalify("currentView", this);
+                vx.debug.globalify("currentCollection", this.collection);
+                this.initializePrepareOptions();
+
+                var filterView = this.initializeInstantiateFilter();
+                var legendView = this.initializeInstantiateLegend();
+                var paginationView = this.initializeInstantiatePagination();
+
+                this.initializeListeners();
+
+                "addAuthAccessRelated" in this && this.addAuthAccessRelated();
+                this.initializeFetchAndStart();
+            },
+            initializeSetEvents() {
                 this.events = _.extend(
                     _.clone(autoUtilEvents.events),
                     this.events
                 );
-                this.setGrid();
-                vx.debug.globalify("currentView", this);
-                vx.debug.globalify("currentCollection", this.collection);
-
+            },
+            initializePrepareOptions() {
                 this.options.get = () => this.options;
                 this.options.sort = this.collection.setSort(this.options.sort);
 
@@ -68,25 +82,36 @@ export default mnx.view.extend(
                 this.collection.filterOnServer =
                     this.options.filterOnServer || false;
                 this.collection.limitOnServer = this.options.limitOnServer || 0;
-
-                var filterView = new FilterView(this.options.filters);
-                filterView.parent = this;
-                this.showChildView("filter", filterView);
+            },
+            initializeInstantiateFilter() {
+                var view = new FilterView(this.options.filters);
+                view.parent = this;
+                this.showChildView("filter", view);
                 this.showChildView("list", new listView(this.options));
 
-                "legend" in this.options &&
-                    this.showChildView(
-                        "legend",
-                        new (mnx.view.extend({
-                            template:
-                                this.options.legend.template || legendTemplate,
-                        }))(this.options.legend)
-                    );
-                this.showChildView(
-                    "pagination",
-                    new paginationView(this.options.pagination)
-                );
+                this.collection.filter =
+                    this.getRegion("filter").currentView.model;
 
+                return view;
+            },
+            initializeInstantiateLegend() {
+                if (!("legend" in this.options)) return;
+
+                var view = new (mnx.view.extend({
+                    template: this.options.legend.template || legendTemplate,
+                }))(this.options.legend);
+
+                "legend" in this.options && this.showChildView("legend", view);
+
+                return view;
+            },
+            initializeInstantiatePagination() {
+                var view = new PaginationView(this.options.pagination);
+                this.showChildView("pagination", view);
+
+                return view;
+            },
+            initializeCollectionListeners() {
                 var fnCollectionReady = () => {
                     this.getRegion("filter").currentView &&
                         this.getRegion("filter").currentView.render();
@@ -100,7 +125,8 @@ export default mnx.view.extend(
                 };
                 this.listenTo(this.collection, "ready", fnCollectionReady);
                 this.listenTo(this.collection, "error", fnCollectionReady);
-
+            },
+            initializeSearchListener() {
                 // ao pesquisar, executa gofirst que por sua vez demanda o re-render
                 this.listenTo(
                     this.getRegion("filter").currentView,
@@ -121,7 +147,8 @@ export default mnx.view.extend(
                         this.afterRender && this.afterRender();
                     }
                 );
-
+            },
+            initializePaginationListener() {
                 this.listenTo(
                     this.getRegion("pagination").currentView,
                     "gopage",
@@ -134,7 +161,8 @@ export default mnx.view.extend(
                         this.afterRender && this.afterRender();
                     }
                 );
-
+            },
+            initializeSortListener() {
                 if (this.options.sort !== false) {
                     this.listenTo(
                         this.getRegion("list").currentView,
@@ -153,12 +181,15 @@ export default mnx.view.extend(
                         }
                     );
                 }
-
-                "addAuthAccessRelated" in this && this.addAuthAccessRelated();
+            },
+            initializeListeners() {
+                this.initializeCollectionListeners();
+                this.initializeSearchListener();
+                this.initializePaginationListener();
+                this.initializeSortListener();
+            },
+            initializeFetchAndStart() {
                 this.fetchRelatedLists();
-
-                this.collection.filter =
-                    this.getRegion("filter").currentView.model;
                 if (this.collection.isReady() !== true) {
                     return this.collection.fetch({ reset: true });
                 }
