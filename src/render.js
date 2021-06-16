@@ -43,7 +43,6 @@ obj.view_prototype.renderSync = function () {
     clearTimeout(this.renderTimer);
     this.renderTimer = null;
     if (isReady === true) {
-        isWrong !== false && this.showRenderWithErrorMsg();
         this.afterReady();
         this.removeLoading && this.removeLoading("renderSync", 0);
         this.renderStatus = true;
