@@ -35,6 +35,20 @@ export default sync.extend({
                 $script[0].src = $el.attr("src"); // You should set the src attribute after the onload event
                 assets.push($script);
             });
+
+            $("link", $container).each((x, el) => {
+                var $el = $(el);
+                var $this = $("<link>");
+                $this.attr("data-loaded", "0");
+                $("body").append($this); // You should also append the link to the DOM before attaching the onload event:
+                $this[0].onload = function () {
+                    $(this).attr("data-loaded", "1");
+                };
+                $this[0].type = $el.attr("type");
+                $this[0].rel = $el.attr("rel");
+                $this[0].href = $el.attr("href"); // You should set the href attribute after the onload event
+                assets.push($this);
+            });
         }
 
         this.oldAssetsAreLoaded(assets, callback);

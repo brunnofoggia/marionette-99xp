@@ -38,7 +38,7 @@ obj.view_prototype.renderSync = function () {
         isWrong = this.isWrong(),
         isReady = (this.renderWithError && isWrong !== false) || isReadyFn();
 
-    console.log("renderSync", isWrong, isWrong !== false, isReady);
+    vx.App().log("renderSync", isWrong, isWrong !== false, isReady);
 
     clearTimeout(this.renderTimer);
     this.renderTimer = null;
@@ -64,6 +64,7 @@ obj.view_prototype.renderWithErrorMsg =
     "Houve um problema ao consultar os dados. Tente novamente.";
 obj.view_prototype.showRenderWithErrorMsg = function () {
     if (!this.renderWithErrorMsg) return;
+
     var title = this.renderWithErrorTitle,
         msg = this.renderWithErrorMsg;
 

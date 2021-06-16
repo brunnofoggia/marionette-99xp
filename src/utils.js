@@ -304,8 +304,9 @@ obj.viewScroll = Object.freeze({
 });
 
 obj.log = {
-    log(s) {
-        !!this.logs && bbxf.debug.log(s);
+    log() {
+        var args = Array.from(arguments);
+        !!this.logs && bbxf.debug.log.apply(bbxf.debug, args);
     },
 };
 
