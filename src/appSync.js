@@ -6,42 +6,6 @@ import utils from "./utils";
 
 export default App.extend({
     executed: 0,
-    relatedLists: {},
-    isAllRelatedReady: vx.view.prototype.isAllRelatedReady,
-    fetchRelatedLists(opts = {}) {
-        if (!vx.app()) {
-            return setTimeout(() => this.fetchRelatedLists(opts), 10);
-        }
-        return _.bind(vx.view.prototype.fetchRelatedLists, this)(opts);
-    },
-    fetchAndStateRelatedList(name, opts = {}) {
-        if (!vx.app()) {
-            return setTimeout(
-                () => this.fetchAndStateRelatedList(name, opts),
-                10
-            );
-        }
-        return _.bind(vx.view.prototype.fetchAndStateRelatedList, this)(
-            name,
-            opts
-        );
-    },
-    isReady() {
-        return this.isAllRelatedReady();
-    },
-    triggerReady() {
-        var isReady = this.isReady() && this.executed === 1;
-
-        if (isReady === true) {
-            this.executed = 2;
-            this.log("C-1 app isready and was executed ! (appready triggered)");
-            this.trigger("appready");
-            this.log("C-2 router started");
-            this.startRouter();
-        }
-
-        return isReady;
-    },
     execute() {
         this.executed = 1;
         this.triggerReady();
@@ -86,13 +50,7 @@ export default App.extend({
         vx.utils.when(
             () => {
                 this.log("B-0 waiting appview.template and appview.isready");
-                return (
-                    _.indexOf(
-                        ["function", "string"],
-                        typeof this.appView.template
-                    ) !== -1 &&
-                    (!this.appView.isReady || this.appView.isReady() === true)
-                );
+                return _.indexOf(["function", "string"], typeof this.appView.template) !== -1 && (!this.appView.isReady || this.appView.isReady() === true);
             },
             () => {
                 this.log("B-1 showview set");
@@ -132,5 +90,58 @@ export default App.extend({
             },
             30
         );
+    },
+    /* sync */
+    relatedLists: {},
+    isAllRelatedReady: vx.view.prototype.isAllRelatedReady,
+    areAllListsReady: vx.view.prototype.areAllListsReady,
+    isAnyListWrong: vx.view.prototype.isAnyListWrong,
+    addRelatedList: vx.view.prototype.addRelatedList,
+    storeRelatedList: vx.view.prototype.storeRelatedList,
+    fetchAndStateList: vx.view.prototype.fetchAndStateList,
+    // fetchAndStateRelatedList: vx.view.prototype.fetchAndStateRelatedList,
+    // fetchAndStateGlobalList: vx.view.prototype.fetchAndStateGlobalList,
+    // fetchRelatedLists: vx.view.prototype.fetchRelatedLists,
+    // fetchGlobalLists: vx.view.prototype.fetchGlobalLists,
+    fetchAllLists: vx.view.prototype.fetchAllLists,
+    fetchRelatedLists(opts = {}) {
+        if (!vx.app()) {
+            return setTimeout(() => this.fetchRelatedLists(opts), 10);
+        }
+        return _.bind(vx.view.prototype.fetchRelatedLists, this)(opts);
+    },
+    fetchGlobalLists(opts = {}) {
+        if (!vx.app()) {
+            return setTimeout(() => this.fetchGlobalLists(opts), 10);
+        }
+        return _.bind(vx.view.prototype.fetchGlobalLists, this)(opts);
+    },
+    fetchAndStateRelatedList(name, opts = {}) {
+        if (!vx.app()) {
+            return setTimeout(() => this.fetchAndStateRelatedList(name, opts), 10);
+        }
+        return _.bind(vx.view.prototype.fetchAndStateRelatedList, this)(name, opts);
+    },
+    fetchAndStateGlobalList(name, opts = {}) {
+        if (!vx.app()) {
+            return setTimeout(() => this.fetchAndStateGlobalList(name, opts), 10);
+        }
+        return _.bind(vx.view.prototype.fetchAndStateGlobalList, this)(name, opts);
+    },
+    isReady() {
+        return this.isAllRelatedReady();
+    },
+    triggerReady() {
+        var isReady = this.isReady() && this.executed === 1;
+
+        if (isReady === true) {
+            this.executed = 2;
+            this.log("C-1 app isready and was executed ! (appready triggered)");
+            this.trigger("appready");
+            this.log("C-2 router started");
+            this.startRouter();
+        }
+
+        return isReady;
     },
 });

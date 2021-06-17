@@ -26,8 +26,7 @@ obj.view_prototype._firstRender = true;
 
 obj.view_prototype.isReady = utils.isReady;
 obj.view_prototype.isWrong = utils.isWrong;
-obj.view_prototype.areReadyModelAndCollection =
-    utils.areReadyModelAndCollection;
+obj.view_prototype.areReadyModelAndCollection = utils.areReadyModelAndCollection;
 obj.view_prototype.areWrongModelOrCollection = utils.areWrongModelOrCollection;
 
 obj.view_prototype.afterReady = function () {};
@@ -59,8 +58,7 @@ obj.view_prototype.renderSync = function () {
 };
 
 obj.view_prototype.renderWithErrorTitle = "Informação";
-obj.view_prototype.renderWithErrorMsg =
-    "Houve um problema ao consultar os dados. Tente novamente.";
+obj.view_prototype.renderWithErrorMsg = "Houve um problema ao consultar os dados. Tente novamente.";
 obj.view_prototype.showRenderWithErrorMsg = function () {
     if (!this.renderWithErrorMsg) return;
 
@@ -89,10 +87,7 @@ obj.view_prototype.serializeData = function () {
 const ejsConfig = { strict: false };
 obj.renderer = function (template, data) {
     if (this.ejs && !_.isFunction(template)) {
-        var config = _.defaults(
-            this.ejsConfig || {},
-            vx.app().ejsConfig || ejsConfig
-        );
+        var config = _.defaults(this.ejsConfig || {}, vx.app().ejsConfig || ejsConfig);
         return ejs.render(template, data, config);
     }
     var compiled = _.isFunction(template) ? template : _.template(template);
@@ -103,10 +98,7 @@ obj.view_prototype.templates = {};
 obj.view_prototype.ejs = true;
 obj.view_prototype.renderPartial = function (viewName, opts = {}) {
     const renderer = _.bind(obj.renderer, this);
-    return renderer(
-        this.templates[viewName],
-        _.extend(this.serializeData(), opts)
-    );
+    return renderer(this.templates[viewName], _.extend(this.serializeData(), opts));
 };
 
 export default obj;
