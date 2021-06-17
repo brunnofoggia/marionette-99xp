@@ -197,11 +197,24 @@ obj.viewActions = {
     },
     breadcrumbText: "",
     breadcrumbTag: "h2",
+    breadcrumbCssClass: "col-12 col-md-auto text-center text-md-left",
+    breadcrumbContainerCssClass: "text-1 text-md-3",
+    breadcrumbActionsCssClass:
+        "col-12 col-lg text-center text-md-right mt-3 mt-md-0",
     getBreadcrumbText() {
         return this.breadcrumbText || "";
     },
     getBreadcrumbTag() {
         return this.breadcrumbTag || "div";
+    },
+    getBreadcrumbCssClass() {
+        return this.breadcrumbCssClass || "";
+    },
+    getBreadcrumbContainerCssClass() {
+        return this.breadcrumbContainerCssClass || "";
+    },
+    getBreadcrumbActionsCssClass() {
+        return this.breadcrumbActionsCssClass || "";
     },
     showBreadcrumb() {
         var text = this.getBreadcrumbText();
@@ -220,10 +233,13 @@ obj.viewActions = {
             "showBreadcrumb" in bbxf.app().getView() &&
             bbxf.app().getView().showBreadcrumb(text);
     },
+
     showBreadcrumbInside(text = "") {
         var $breadcrumb = this.getBreadcrumbContainer();
         $(".breadcrumb-text", $breadcrumb).remove();
-        $(`<${this.getBreadcrumbTag()} class="col-12 col-lg">`)
+        $(
+            `<${this.getBreadcrumbTag()} class="${this.getBreadcrumbCssClass()}">`
+        )
             .addClass("breadcrumb-text")
             .html(text)
             .prependTo($breadcrumb);
