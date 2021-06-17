@@ -42,7 +42,10 @@ export default sync.extend({
             this.model = new Model({
                 id: "id" in this.options ? this.options.id : null,
             });
+
+            return true;
         }
+        return false;
     },
     renderListener() {
         if (this.model) {

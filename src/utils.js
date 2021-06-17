@@ -96,11 +96,8 @@ obj.isWrong = function () {
         areWrongModelOrCollection = this.areWrongModelOrCollection();
 
     if (areWrongModelOrCollection !== false) s = areWrongModelOrCollection;
-    else if (
-        "isAnyRelatedWrong" in this &&
-        this.isAnyRelatedWrong() !== false
-    ) {
-        if (this.infoRelatedReady) s = [-51, this.infoRelatedReady];
+    else if ("isAnyListWrong" in this && this.isAnyListWrong() !== false) {
+        if (this.infoRelatedWrong) s = [-51, this.infoRelatedWrong];
         s = -5;
     }
     typeof s === "number" && (s = [s]);
