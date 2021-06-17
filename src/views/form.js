@@ -397,22 +397,32 @@ export default sync.extend({
 
         return url;
     },
+    getActionSave() {
+        return {
+            ico: "save",
+            btnColor: "primary",
+            btnCss: "text-light",
+            title: "Salvar",
+            callback: (e) => this.save(e),
+            auth: "{{moduleName}}/{{typeof id !== 'undefined' && id ? 'update' : 'create'}}",
+        };
+    },
+    getActionBack() {
+        return {
+            ico: "arrow-left",
+            title: "Voltar",
+            callback: (e) => this.cancel(e),
+        };
+    },
     getDefaultActions() {
-        return [
-            {
-                ico: "save",
-                btnColor: "primary",
-                btnCss: "text-light",
-                title: "Salvar",
-                callback: (e) => this.save(e),
-                auth: "{{moduleName}}/{{typeof id !== 'undefined' && id ? 'update' : 'create'}}",
-            },
-            {
-                ico: "arrow-left",
-                title: "Voltar",
-                callback: (e) => this.cancel(e),
-            },
-        ];
+        var a = [],
+            aSave = this.getActionSave(),
+            aBack = this.getActionBack();
+
+        aSave && a.push(aSave);
+        aBack && a.push(aBack);
+
+        return a;
     },
     /* popups */
     openPopup(e, opts, form, collection, closeFn) {
