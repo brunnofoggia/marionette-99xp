@@ -349,7 +349,9 @@ export default sync.extend({
         this.goback();
     },
     goback(saved) {
-        saved && this.showSavedInfo();
+        if (saved) {
+            return this.goNext();
+        }
 
         var urlTpl =
             saved && this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
@@ -367,10 +369,13 @@ export default sync.extend({
             });
     },
     goNext() {
+        this.showSavedInfo();
+
         var urlTpl = this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
         if (urlTpl) {
             return this.goto(urlTpl);
         }
+        return Backbone.history.history.back();
     },
     goto(urlTpl) {
         var url = _.template(urlTpl)({ model: this.model });
