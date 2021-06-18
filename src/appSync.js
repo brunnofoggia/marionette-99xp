@@ -12,6 +12,7 @@ export default App.extend({
     },
     initialize(o) {
         this.online = true;
+        this.initAuth();
 
         vx.debug.globalify("_", _);
         vx.debug.globalify("$", $);
@@ -22,6 +23,20 @@ export default App.extend({
         if (!this.fetchRelatedLists({ listening: false })) {
             this.triggerReady();
         }
+    },
+    initAuth() {
+        if (this.Auth) {
+            var a = this.Auth;
+            this.auth = new a();
+            this.listenTo(this.auth, "logout", () => this.afterLogout());
+        }
+    },
+    afterLogoutLink: "/",
+    afterLogout() {
+        this.isLoggedEvents();
+        vx.router.navigate(this.afterLogoutLink, {
+            trigger: true,
+        });
     },
     allDone() {
         return this.executed === 9;
@@ -50,7 +65,13 @@ export default App.extend({
         vx.utils.when(
             () => {
                 this.log("B-0 waiting appview.template and appview.isready");
-                return _.indexOf(["function", "string"], typeof this.appView.template) !== -1 && (!this.appView.isReady || this.appView.isReady() === true);
+                return (
+                    _.indexOf(
+                        ["function", "string"],
+                        typeof this.appView.template
+                    ) !== -1 &&
+                    (!this.appView.isReady || this.appView.isReady() === true)
+                );
             },
             () => {
                 this.log("B-1 showview set");
@@ -80,6 +101,9 @@ export default App.extend({
                 var viewObj = typeof view === "object" ? view : null;
 
                 if (this.getView().getRegion("content")) {
+                    this.getView()
+                        .getRegion("content")
+                        .currentView?.trigger("unload");
                     this.getView().getRegion("content").show(viewObj);
 
                     if (!this.appView.$el.is(":visible")) {
@@ -91,6 +115,7 @@ export default App.extend({
             30
         );
     },
+    isLoggedEvents() {},
     /* sync */
     relatedLists: {},
     isAllRelatedReady: vx.view.prototype.isAllRelatedReady,
@@ -118,18 +143,30 @@ export default App.extend({
     },
     fetchAndStateRelatedList(name, opts = {}) {
         if (!vx.app()) {
-            return setTimeout(() => this.fetchAndStateRelatedList(name, opts), 10);
+            return setTimeout(
+                () => this.fetchAndStateRelatedList(name, opts),
+                10
+            );
         }
-        return _.bind(vx.view.prototype.fetchAndStateRelatedList, this)(name, opts);
+        return _.bind(vx.view.prototype.fetchAndStateRelatedList, this)(
+            name,
+            opts
+        );
     },
     fetchAndStateGlobalList(name, opts = {}) {
         if (!vx.app()) {
-            return setTimeout(() => this.fetchAndStateGlobalList(name, opts), 10);
+            return setTimeout(
+                () => this.fetchAndStateGlobalList(name, opts),
+                10
+            );
         }
-        return _.bind(vx.view.prototype.fetchAndStateGlobalList, this)(name, opts);
+        return _.bind(vx.view.prototype.fetchAndStateGlobalList, this)(
+            name,
+            opts
+        );
     },
     isReady() {
-        return this.isAllRelatedReady();
+        return this.areAllListsReady();
     },
     triggerReady() {
         var isReady = this.isReady() && this.executed === 1;

@@ -9,6 +9,7 @@ export default Mn.Application.extend(
     _.extend(
         {
             logs: true,
+            homeLink: "/",
             router: vx.router,
             navigationData: {},
             navigate(u, o = {}) {
