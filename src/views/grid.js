@@ -48,6 +48,7 @@ export default mnx.view.extend(
                 this.initializePrepareOptions();
 
                 var filterView = this.initializeInstantiateFilter();
+                var listView = this.initializeInstantiateList();
                 var legendView = this.initializeInstantiateLegend();
                 var paginationView = this.initializeInstantiatePagination();
 
@@ -86,10 +87,16 @@ export default mnx.view.extend(
                 var view = new FilterView(this.options.filters);
                 view.parent = this;
                 this.showChildView("filter", view);
-                this.showChildView("list", new listView(this.options));
 
                 this.collection.filter =
                     this.getRegion("filter").currentView.model;
+
+                return view;
+            },
+            initializeInstantiateList() {
+                var view = new listView(this.options);
+                view.parent = this;
+                this.showChildView("list", view);
 
                 return view;
             },

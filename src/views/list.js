@@ -14,20 +14,24 @@ export default mnx.view.extend({
     renderOnState: "ready",
     render: mnx.view.prototype.renderSync,
     preinitialize(opts) {
-        "ev" in opts && (this.events = _.extend(_.clone(this.__proto__.events), opts.ev));
+        "ev" in opts &&
+            (this.events = _.extend(_.clone(this.__proto__.events), opts.ev));
     },
     onRender() {},
     selectRow(e) {
-        $("tr", this.$el).removeClass("bg-primary").removeClass("text-light");
-        if (!$(e.currentTarget).is(".selected")) {
-            $(e.currentTarget).addClass("bg-primary").addClass("text-light").addClass("selected");
-        } else {
-            $("tr", this.$el).removeClass("selected");
+        var selected = $(e.currentTarget).is(".selected");
+        $("tr", this.$el).removeClass("bg-primary text-light selected");
+        if (!selected) {
+            $(e.currentTarget)
+                .addClass("bg-primary")
+                .addClass("text-light")
+                .addClass("selected");
         }
     },
     getSelectedRow(attr = "id") {
         var selected = $("tr.selected", this.$el);
-        if (selected.length > 0) return attr ? selected.attr("data-" + attr) : selected;
+        if (selected.length > 0)
+            return attr ? selected.attr("data-" + attr) : selected;
         return false;
     },
     orderby(e) {
