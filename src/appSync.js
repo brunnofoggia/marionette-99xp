@@ -118,6 +118,7 @@ export default App.extend({
     isLoggedEvents() {},
     /* sync */
     relatedLists: {},
+    globalLists: {},
     isAllRelatedReady: vx.view.prototype.isAllRelatedReady,
     areAllListsReady: vx.view.prototype.areAllListsReady,
     isAnyListWrong: vx.view.prototype.isAnyListWrong,
@@ -164,6 +165,13 @@ export default App.extend({
             name,
             opts
         );
+    },
+    setGlobalList(name, oClass, o = {}) {
+        if (!this.globalLists[name]) this.globalLists[name] = new oClass(o);
+        return this.globalLists[name];
+    },
+    getGlobalList(name, oClass, o = {}) {
+        return this.globalLists[name];
     },
     isReady() {
         return this.areAllListsReady();
