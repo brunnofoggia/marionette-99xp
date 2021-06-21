@@ -205,11 +205,22 @@ export default mnx.view.extend(
                 }
                 fnCollectionReady();
             },
+            removeConfirmTitle: "Confirmação de Exclusão",
+            removeConfirmMessage:
+                "Você confirma a exclusão do registro #{{id}}?",
+            removeLoadingMessage: "Excluindo registro",
+            removedInfoMessage: () => "Registro #{{id}} removido",
+            removeInstructionMessage: () => "Selecione um item para excluir",
+            editInstructionMessage: "Selecione um item para alterar",
+            removedInfoCssClass: "danger text-color-light",
+            removeInstructionCssClass: "warning text-color-dark",
+            editInstructionCssClass: "warning text-color-dark",
+            removeErrorCssClass: "danger font-weight-bold text-light",
             remove() {
                 var selectedRow =
                     this.getRegion("list").currentView.getSelectedRow("cid");
                 if (!selectedRow) {
-                    return;
+                    return this.showRemoveInstruction();
                 }
                 var selectedModel = this.collection.find(
                     (model) => model.cid == selectedRow
@@ -217,13 +228,27 @@ export default mnx.view.extend(
                 var id = selectedModel.id;
 
                 vx.app().ux.popup.confirm({
-                    title: "Confirmação de Exclusão",
-                    msg: "Você confirma a exclusão do registro #" + id + " ?",
+                    title: _.template(_.result(this, "removeConfirmTitle"))({
+                        id,
+                        model: selectedModel,
+                    }),
+                    msg: _.template(_.result(this, "removeConfirmMessage"))({
+                        id,
+                        model: selectedModel,
+                    }),
                     confirm: "Confirmar",
                     dataCancel: "Cancelar",
                     callback: (status) => {
                         if (status) {
-                            this.addLoading("Excluindo registro", "remove");
+                            this.addLoading(
+                                _.template(
+                                    _.result(this, "removeLoadingMessage")
+                                )({
+                                    id,
+                                    model: selectedModel,
+                                }),
+                                "remove"
+                            );
                             this.listenToOnce(
                                 [
                                     selectedModel,
@@ -232,8 +257,16 @@ export default mnx.view.extend(
                                         this.removeLoading("remove");
                                         this.collection.fetch({ reset: true });
                                         vx.app().ux.toast.add({
-                                            msg: `Registro #${id} removido`,
-                                            color: "danger text-color-light",
+                                            msg: _.template(
+                                                _.result(
+                                                    this,
+                                                    "removedInfoMessage"
+                                                )
+                                            )({
+                                                id,
+                                                model: selectedModel,
+                                            }),
+                                            color: this.removedInfoCssClass,
                                         });
                                     },
                                 ],
@@ -244,7 +277,7 @@ export default mnx.view.extend(
                                         this.removeLoading("remove");
                                         vx.app().ux.showInfo({
                                             msg: jqXHR.responseJSON.message,
-                                            color: "danger font-weight-bold text-light",
+                                            color: this.removeErrorCssClass,
                                         });
                                     },
                                 ]
@@ -258,7 +291,7 @@ export default mnx.view.extend(
                 var selectedRow =
                     this.getRegion("list").currentView.getSelectedRow("cid");
                 if (!selectedRow) {
-                    return;
+                    return this.showEditInstruction();
                 }
 
                 var selectedModel = this.collection.find(
@@ -269,6 +302,20 @@ export default mnx.view.extend(
                         .replace(/\/pk$/, "/" + selectedModel.id);
 
                 vx.router.navigate(route, { trigger: true });
+            },
+            showRemoveInstruction() {
+                console.log(_.result(this, "removeInstructionMessage"));
+
+                vx.app().ux.toast.add({
+                    msg: _.result(this, "removeInstructionMessage"),
+                    color: this.removeInstructionCssClass,
+                });
+            },
+            showEditInstruction() {
+                vx.app().ux.toast.add({
+                    msg: _.result(this, "editInstructionMessage"),
+                    color: this.editInstructionCssClass,
+                });
             },
             createUrl: "/{{moduleDir || ''}}{{modulePath}}/s/form",
             updateUrl: "/{{moduleDir || ''}}{{modulePath}}/s/form/pk",

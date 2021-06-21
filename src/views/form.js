@@ -367,7 +367,9 @@ export default sync.extend({
     showSavedInfo() {
         this.savedInfo &&
             vx.app().ux.toast.add({
-                msg: _.template(this.savedInfo)({ model: this.model }),
+                msg: _.template(_.result(this, "savedInfo"))({
+                    model: this.model,
+                }),
                 color: "info text-dark",
             });
     },
