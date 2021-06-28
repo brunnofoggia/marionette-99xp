@@ -29,6 +29,16 @@ export default App.extend({
             var a = this.Auth;
             this.auth = new a();
             this.listenTo(this.auth, "logout", () => this.afterLogout());
+            this.listenTo(this.auth, "logged", () => {
+                vx.utils.when(
+                    () => {
+                        return (
+                            this.getView() && this.appView.$el.is(":visible")
+                        );
+                    },
+                    () => this.isLoggedEvents()
+                );
+            });
         }
     },
     afterLogoutLink: "/",
@@ -97,7 +107,7 @@ export default App.extend({
             },
             () => {
                 this.log("F-2 showcontent executed");
-                this.isLoggedEvents();
+                // this.isLoggedEvents();
                 var viewObj = typeof view === "object" ? view : null;
 
                 if (this.getView().getRegion("content")) {
