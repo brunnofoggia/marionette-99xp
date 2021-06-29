@@ -13,6 +13,7 @@ export default mnx.view.extend({
     initialRenderOnState: "ready",
     renderOnState: "ready",
     render: mnx.view.prototype.renderSync,
+    globalify: false,
     preinitialize(opts) {
         "ev" in opts &&
             (this.events = _.extend(_.clone(this.__proto__.events), opts.ev));

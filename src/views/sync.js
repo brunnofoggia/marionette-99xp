@@ -29,9 +29,12 @@ export default mnx.view.extend(
             );
             this.masks.apply($el);
         },
-        initialize() {
+        globalify() {
             vx.debug.globalify("currentView", this);
             vx.debug.globalify("currentModel", this.model);
+        },
+        initialize() {
+            _.result(this, "globalify");
             this.events = _.extend(_.clone(autoUtilEvents.events), this.events);
             this.validateOnSet = false;
 

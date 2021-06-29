@@ -9,6 +9,7 @@ var model = vx.models.filter;
 export default form.extend({
     template: template,
     renderWithErrorMsg: false,
+    globalify: false,
     events: {
         "click button.search": "search",
         "click button.clear": "clear",
@@ -30,12 +31,19 @@ export default form.extend({
         this.removeWrapper();
         $('[data-toggle="tooltip"]', this.$el).tooltip();
         $("[data-mask]", this.$el).each((x, el) => {
-            $(el).attr("data-mask") in this.masks ? this.masks[$(el).attr("data-mask")]($(el)) : $(el).mask($(el).attr("data-mask"));
+            $(el).attr("data-mask") in this.masks
+                ? this.masks[$(el).attr("data-mask")]($(el))
+                : $(el).mask($(el).attr("data-mask"));
         });
         this.setFiltersSizeClass();
     },
     setFiltersSizeClass() {
-        this.$el.parent().addClass("filter-lines-" + Math.ceil(this.model.displayedCols().length / 3));
+        this.$el
+            .parent()
+            .addClass(
+                "filter-lines-" +
+                    Math.ceil(this.model.displayedCols().length / 3)
+            );
     },
     search(e) {
         e && vx.events.stopAll(e);
@@ -54,7 +62,13 @@ export default form.extend({
             body = `<select id="modal-confirm-message" class="form-control" multiple="multiple" size="${cols.length}" style="overflow: auto;">{o}</select>`,
             options = [];
 
-        _.each(cols, (col) => options.push(`<option value="${col.name}" ${isDisplayed(col) ? 'selected="selected"' : ""}>${col.title}</option>`));
+        _.each(cols, (col) =>
+            options.push(
+                `<option value="${col.name}" ${
+                    isDisplayed(col) ? 'selected="selected"' : ""
+                }>${col.title}</option>`
+            )
+        );
         body = body.replace("{o}", options.join(""));
 
         vx.ux.popup.confirmMessage({
