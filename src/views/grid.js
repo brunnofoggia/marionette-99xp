@@ -119,25 +119,26 @@ export default mnx.view.extend(
             },
             initializeGetCollectionListeners() {
                 var fnCollectionReady = () => {
-                    this.getRegion("filter").currentView &&
-                        this.getRegion("filter").currentView.render();
-                    this.getRegion("list").currentView &&
-                        this.getRegion("list").currentView.render();
-                    this.getRegion("pagination").currentView &&
-                        this.getRegion("pagination").currentView.render();
+                        this.getRegion("filter").currentView &&
+                            this.getRegion("filter").currentView.render();
+                        this.getRegion("list").currentView &&
+                            this.getRegion("list").currentView.render();
+                        this.getRegion("pagination").currentView &&
+                            this.getRegion("pagination").currentView.render();
 
-                    this.removeSubmitLoading();
-                    this.afterRender && this.afterRender();
-                },
-                fnCollectionError = (c, xhr, o) => {
-                    vx.showAjaxError(xhr);
-                    fnCollectionReady();
-                };
+                        this.removeSubmitLoading();
+                        this.afterRender && this.afterRender();
+                    },
+                    fnCollectionError = (c, xhr, o) => {
+                        vx.showAjaxError(xhr);
+                        fnCollectionReady();
+                    };
 
-                return {fnCollectionReady, fnCollectionError};
+                return { fnCollectionReady, fnCollectionError };
             },
             initializeCollectionListeners() {
-                var {fnCollectionReady, fnCollectionError} = this.initializeGetCollectionListeners();
+                var { fnCollectionReady, fnCollectionError } =
+                    this.initializeGetCollectionListeners();
                 this.listenTo(this.collection, "ready", fnCollectionReady);
                 this.listenTo(this.collection, "error", fnCollectionError);
             },
@@ -204,7 +205,8 @@ export default mnx.view.extend(
                 this.initializeSortListener();
             },
             initializeFetchAndStart() {
-                var {fnCollectionReady, fnCollectionError} = this.initializeGetCollectionListeners();
+                var { fnCollectionReady, fnCollectionError } =
+                    this.initializeGetCollectionListeners();
                 this.fetchRelatedLists();
                 if (this.collection.isReady() !== true) {
                     return this.collection.fetch({ reset: true });
@@ -237,10 +239,12 @@ export default mnx.view.extend(
                     title: _.template(_.result(this, "removeConfirmTitle"))({
                         id,
                         model: selectedModel,
+                        m: selectedModel,
                     }),
                     msg: _.template(_.result(this, "removeConfirmMessage"))({
                         id,
                         model: selectedModel,
+                        m: selectedModel,
                     }),
                     confirm: "Confirmar",
                     dataCancel: "Cancelar",
@@ -252,6 +256,7 @@ export default mnx.view.extend(
                                 )({
                                     id,
                                     model: selectedModel,
+                                    m: selectedModel,
                                 }),
                                 "remove"
                             );
@@ -271,6 +276,7 @@ export default mnx.view.extend(
                                             )({
                                                 id,
                                                 model: selectedModel,
+                                                m: selectedModel,
                                             }),
                                             color: this.removedInfoCssClass,
                                         });
