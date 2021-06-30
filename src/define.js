@@ -10,8 +10,20 @@ import utils from "./utils";
 
 var mnx = {};
 
-mnx.view = Mn.View.extend(_.extend({}, _.clone(utils.viewLoading), _.clone(utils.viewScroll)));
-mnx.cview = Mn.CollectionView.extend(_.extend({}, _.clone(utils.viewLoading), _.clone(utils.viewScroll)));
+mnx.view = Mn.View.extend(
+    _.extend(
+        { data: {} },
+        _.clone(utils.viewLoading),
+        _.clone(utils.viewScroll)
+    )
+);
+mnx.cview = Mn.CollectionView.extend(
+    _.extend(
+        { data: {} },
+        _.clone(utils.viewLoading),
+        _.clone(utils.viewScroll)
+    )
+);
 mnx.app = app;
 mnx.appSync = appSync;
 mnx.region = Mn.Region.extend();
@@ -68,8 +80,10 @@ mnx.view.prototype.isAnyListWrong = bbxf.view.prototype.isAnyListWrong;
 mnx.view.prototype.addRelatedList = bbxf.view.prototype.addRelatedList;
 mnx.view.prototype.storeRelatedList = bbxf.view.prototype.storeRelatedList;
 mnx.view.prototype.fetchAndStateList = bbxf.view.prototype.fetchAndStateList;
-mnx.view.prototype.fetchAndStateRelatedList = bbxf.view.prototype.fetchAndStateRelatedList;
-mnx.view.prototype.fetchAndStateGlobalList = bbxf.view.prototype.fetchAndStateGlobalList;
+mnx.view.prototype.fetchAndStateRelatedList =
+    bbxf.view.prototype.fetchAndStateRelatedList;
+mnx.view.prototype.fetchAndStateGlobalList =
+    bbxf.view.prototype.fetchAndStateGlobalList;
 mnx.view.prototype.fetchRelatedLists = bbxf.view.prototype.fetchRelatedLists;
 mnx.view.prototype.fetchGlobalLists = bbxf.view.prototype.fetchGlobalLists;
 mnx.view.prototype.fetchAllLists = bbxf.view.prototype.fetchAllLists;
