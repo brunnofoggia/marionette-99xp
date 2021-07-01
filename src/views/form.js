@@ -369,6 +369,7 @@ export default sync.extend({
             vx.app().ux.toast.add({
                 msg: _.template(_.result(this, "savedInfo"))({
                     model: this.model,
+                    m: this.model,
                 }),
                 color: "info text-dark",
             });
@@ -383,7 +384,7 @@ export default sync.extend({
         return Backbone.history.history.back();
     },
     goto(urlTpl) {
-        var url = _.template(urlTpl)({ model: this.model });
+        var url = _.template(urlTpl)({ model: this.model, m: this.model });
 
         url = this.formatRelativeUrl(url);
         return vx.router.navigate(url, { trigger: true });
