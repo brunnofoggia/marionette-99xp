@@ -197,7 +197,7 @@ obj.viewActions = {
     breadcrumbCssClass: "col-12 col-md-auto text-center text-md-left",
     breadcrumbContainerCssClass: "text-1 text-md-3",
     breadcrumbActionsCssClass:
-        "col-12 col-lg text-center text-md-right mt-3 mt-md-0",
+        "col-12 col-lg text-center text-lg-right mt-3 mt-lg-0",
     getBreadcrumbText() {
         return _.result(this, "breadcrumbText") || "";
     },
