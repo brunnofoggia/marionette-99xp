@@ -98,18 +98,21 @@ export default sync.extend({
     setValue(e) {
         var el = this.getTarget(e),
             $el = $(el),
-            data = {},
             field = $el.is(".as-field")
                 ? $el.attr("data-field-name")
-                : $el.attr("name");
+                : $el.attr("name"), value;
 
         if (!field) return;
-
-        data[field] = this.getElValue($el);
-
+        value = this.getElValue($el);
+        this.setFieldValue(field, value);
+    },
+    setFieldValue(field, value) {
+        var data = {};
+        data[field] = value;
         var set = this.model.set(data, {
             validate: !/^__/.test(field) ? true : false,
         });
+
         this.showRequired(this.$el);
         if (!set) {
             this.model.errorsMap[field] = true;
