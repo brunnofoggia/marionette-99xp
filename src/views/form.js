@@ -84,7 +84,7 @@ export default sync.extend({
     getElValue($el) {
         return $el.is("select")
             ? $("option:selected", $el).attr("data-value") ||
-                  $("option:selected", $el).val()
+                $("option:selected", $el).val()
             : $el.is("input:checkbox") || $el.is("input:radio")
             ? $el.is(":checked")
                 ? $el.val()
@@ -93,10 +93,10 @@ export default sync.extend({
                 : ""
             : $el.is(".as-field")
             ? $el.attr("data-field-value")
-            : $el.val();
+            : $el.is(":file") ? vx.utils.file.getData($el) : $el.val();
     },
     setValue(e) {
-        var el = e.target || e.currentTarget,
+        var el = this.getTarget(e),
             $el = $(el),
             data = {},
             field = $el.is(".as-field")

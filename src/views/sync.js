@@ -111,6 +111,9 @@ export default mnx.view.extend(
             this.showBreadcrumb();
             this.customize();
         },
+        getTarget(e) {
+            return e.target || e.currentTarget;
+        },
         customize() {},
     })
 );
