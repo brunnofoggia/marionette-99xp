@@ -24,6 +24,7 @@ export default sync.extend({
         "change select": "setValue",
         "change textarea": "setValue",
         "change .as-field": "setValue",
+        'change :file[data-to]': 'sendFileContentTo',
         "submit form": "save",
         "click .cancel": "cancel",
         submit: "save",
@@ -121,6 +122,16 @@ export default sync.extend({
         } else {
             this.removeError(field);
         }
+    },
+    sendFileContentTo(e) {
+        var el = this.getTarget(e),
+            $el = $(el);
+
+        vx.utils.file.getDataURL($el, _.partial(($el, s, v) => {
+            if(s) {
+                this.setFieldValue($el.attr('data-to'), v);
+            }
+        }, $el));
     },
     showRequired($form) {
         if (!this.model || !this.model.getMandatoryValidations) return;
@@ -260,7 +271,7 @@ export default sync.extend({
         $field = $(":input:first", $container);
 
         if ($field) {
-            $field.focus();
+            !$field.is(':file') ? $field.focus() : $field.click();
         }
     },
     setLabelsFilled($form) {
