@@ -112,7 +112,7 @@ export default mnx.view.extend(
             this.customize();
         },
         getTarget(e) {
-            return e.target || e.currentTarget;
+            return e.currentTarget || e.target;
         },
         customize() {},
     })

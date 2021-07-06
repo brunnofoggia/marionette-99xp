@@ -25,6 +25,7 @@ export default sync.extend({
         "change textarea": "setValue",
         "change .as-field": "setValue",
         "change :file[data-to]": "sendFileContentTo",
+        "click .clear-field-data[data-field]": "clearFieldData",
         "submit form": "save",
         "click .cancel": "cancel",
         submit: "save",
@@ -98,6 +99,29 @@ export default sync.extend({
             ? vx.utils.file.getData($el)
             : $el.val();
     },
+    clearFieldData(e) {
+        e && vx.events.stopAll(e);
+
+        var el = this.getTarget(e),
+            $el = $(el),
+            fieldNames = $el.attr("data-field").split(","),
+            dataVal = $el.attr("data-val"),
+            v = !dataVal
+                ? null
+                : dataVal === "{}"
+                ? {}
+                : dataVal == "0"
+                ? 0
+                : "";
+
+        for (var fieldName of fieldNames) {
+            var o = {};
+            o[fieldName] = v;
+
+            this.model.set(o, { validate: false });
+            this.successDisplay(fieldName);
+        }
+    },
     setValue(e) {
         var el = this.getTarget(e),
             $el = $(el),
@@ -122,7 +146,14 @@ export default sync.extend({
             return false;
         } else {
             this.removeError(field);
+            this.successDisplay(field);
         }
+    },
+    successDisplay(fieldName) {
+        var fieldMethodName = this.methodifyFieldName(fieldName),
+            successMethod = "successDisplay_" + fieldMethodName;
+
+        _.result2(this, successMethod, null, [fieldName], this);
     },
     sendFileContentTo(e) {
         var el = this.getTarget(e),
@@ -144,7 +175,7 @@ export default sync.extend({
         // if(_.size(v) > 0) {
         var reqFields =
             _.size(v) > 0
-                ? _.map(_.keys(v), (i) => this.getFieldErrorName(i))
+                ? _.map(_.keys(v), (i) => this.methodifyFieldName(i))
                 : [];
         $(
             "input[name], select[name], textarea[name], .as-field[data-field-name]",
@@ -155,8 +186,8 @@ export default sync.extend({
                 $label = $("label:first", $p),
                 name = this.getFieldName($el),
                 reqNameTest = [
-                    this.getFieldErrorName(name),
-                    this.getFieldErrorName(name.replace(/\[\d+\]/g, "[]")),
+                    this.methodifyFieldName(name),
+                    this.methodifyFieldName(name.replace(/\[\d+\]/g, "[]")),
                 ];
 
             $el.val() && this.setLabelFilled($el);
@@ -175,8 +206,8 @@ export default sync.extend({
             ? $field.attr("data-field-name")
             : $field.attr("name");
     },
-    getFieldErrorName(fieldName) {
-        return fieldName.replace(/\[|\]/g, "-").replace(/\-+/g, "-") + "x";
+    methodifyFieldName(fieldName) {
+        return fieldName.replace(/\[|\]/g, "_").replace(/_+/g, "_") + "x";
     },
     showErrors(errors) {
         if (!errors) return false;
@@ -194,8 +225,8 @@ export default sync.extend({
             fieldErrorLength[fieldName]++;
             if (fieldErrorLength[fieldName] > 1) continue;
 
-            var fieldErrorName = this.getFieldErrorName(fieldName);
-            var $field = this.getFieldWithError(fieldName),
+            var fieldErrorName = this.methodifyFieldName(fieldName);
+            var $field = this.getFieldByName(fieldName),
                 $errorPlacement = this.errorPlacement(fieldName);
 
             if ($errorPlacement.length) {
@@ -213,7 +244,7 @@ export default sync.extend({
         this.validateOnSet = true;
         return false;
     },
-    getFieldWithError(fieldName) {
+    getFieldByName(fieldName) {
         return $(
             '[name="' +
                 fieldName +
@@ -230,8 +261,8 @@ export default sync.extend({
         });
     },
     showFieldError(fieldName, error) {
-        var fieldErrorName = this.getFieldErrorName(fieldName),
-            $field = this.getFieldWithError(fieldName),
+        var fieldErrorName = this.methodifyFieldName(fieldName),
+            $field = this.getFieldByName(fieldName),
             $errorPlacement = this.errorPlacement(fieldName);
 
         $errorPlacement
@@ -257,7 +288,7 @@ export default sync.extend({
             .addClass("danger");
     },
     errorPlacement(fieldName) {
-        var $field = this.getFieldWithError(fieldName),
+        var $field = this.getFieldByName(fieldName),
             $errorPlacement = $(
                 `.error-placement[data-field="${fieldName}"]`,
                 this.$el
@@ -286,8 +317,8 @@ export default sync.extend({
         );
     },
     clearError(fieldName) {
-        // var fieldErrorName = this.getFieldErrorName(fieldName);
-        var $field = this.getFieldWithError(fieldName);
+        // var fieldErrorName = this.methodifyFieldName(fieldName);
+        var $field = this.getFieldByName(fieldName);
         if ($field.length > 0) {
             this.errorPlacement(fieldName).popover("dispose");
         }
