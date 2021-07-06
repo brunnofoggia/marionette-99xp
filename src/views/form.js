@@ -199,9 +199,10 @@ export default sync.extend({
                 $errorPlacement = this.errorPlacement(fieldName);
 
             if ($errorPlacement.length) {
-                if (this.isThereAnExistingError(fieldErrorName)) {
+                if (this.isThereAnExistingSameError(fieldErrorName, error)) {
                     continue;
                 }
+
                 this.clearError(fieldName, error);
                 this.showFieldError(fieldName, error);
             } else {
@@ -242,6 +243,8 @@ export default sync.extend({
                 "data-content",
                 '<span class="form-error-' +
                     fieldErrorName +
+                    '" data-error="' +
+                    Base64.encode(error[1]) +
                     '">' +
                     error[1] +
                     "</span>"
@@ -265,10 +268,21 @@ export default sync.extend({
         delete this.model.errorsMap[field];
         this.clearError(field);
     },
-    isThereAnExistingError(fieldErrorName) {
+    getExistingError(fieldErrorName) {
+        var $error = $(
+            '[class*="form-error-' + fieldErrorName + '"]',
+            this.$el
+        );
+        return $error.length > 0 ? $error : null;
+    },
+    isThereAnExistingError(fieldErrorName, error) {
+        return !!this.getExistingError(fieldErrorName);
+    },
+    isThereAnExistingSameError(fieldErrorName, error) {
+        var $error = this.getExistingError(fieldErrorName);
         return (
-            $('[class*="form-error-' + fieldErrorName + '"]', this.$el).length >
-            0
+            $error &&
+            $error.is('[data-error="' + Base64.encode(error[1]) + '"]')
         );
     },
     clearError(fieldName) {
