@@ -24,11 +24,11 @@ export default sync.extend({
         "change select": "setValue",
         "change textarea": "setValue",
         "change .as-field": "setValue",
-        'change :file[data-to]': 'sendFileContentTo',
+        "change :file[data-to]": "sendFileContentTo",
         "submit form": "save",
         "click .cancel": "cancel",
         submit: "save",
-        "click label.auto-for:not([for])": "setLabelFocus",
+        "click .auto-for:not([for])": "setLabelFocus",
         "focus input,select,textarea": "setFocusBehavior",
         "blur input,select,textarea": "setBlurBehavior",
     },
@@ -85,7 +85,7 @@ export default sync.extend({
     getElValue($el) {
         return $el.is("select")
             ? $("option:selected", $el).attr("data-value") ||
-                $("option:selected", $el).val()
+                  $("option:selected", $el).val()
             : $el.is("input:checkbox") || $el.is("input:radio")
             ? $el.is(":checked")
                 ? $el.val()
@@ -94,14 +94,15 @@ export default sync.extend({
                 : ""
             : $el.is(".as-field")
             ? $el.attr("data-field-value")
-            : $el.is(":file") ? vx.utils.file.getData($el) : $el.val();
+            : $el.is(":file")
+            ? vx.utils.file.getData($el)
+            : $el.val();
     },
     setValue(e) {
         var el = this.getTarget(e),
             $el = $(el),
-            field = $el.is(".as-field")
-                ? $el.attr("data-field-name")
-                : $el.attr("name"), value;
+            field = this.getFieldName($el),
+            value;
 
         if (!field) return;
         value = this.getElValue($el);
@@ -127,11 +128,14 @@ export default sync.extend({
         var el = this.getTarget(e),
             $el = $(el);
 
-        vx.utils.file.getDataURL($el, _.partial(($el, s, v) => {
-            if(s) {
-                this.setFieldValue($el.attr('data-to'), v);
-            }
-        }, $el));
+        vx.utils.file.getDataURL(
+            $el,
+            _.partial(($el, s, v) => {
+                if (s) {
+                    this.setFieldValue($el.attr("data-to"), v);
+                }
+            }, $el)
+        );
     },
     showRequired($form) {
         if (!this.model || !this.model.getMandatoryValidations) return;
@@ -149,9 +153,7 @@ export default sync.extend({
             var $el = $(el),
                 $p = $el.parents(".form-field:first,.form-group:first").eq(0),
                 $label = $("label:first", $p),
-                name = $el.is(".as-field")
-                    ? $el.attr("data-field-name")
-                    : $el.attr("name"),
+                name = this.getFieldName($el),
                 reqNameTest = [
                     this.getFieldErrorName(name),
                     this.getFieldErrorName(name.replace(/\[\d+\]/g, "[]")),
@@ -167,6 +169,11 @@ export default sync.extend({
             }
         });
         // }
+    },
+    getFieldName($field) {
+        return $field.is(".as-field")
+            ? $field.attr("data-field-name")
+            : $field.attr("name");
     },
     getFieldErrorName(fieldName) {
         return fieldName.replace(/\[|\]/g, "-").replace(/\-+/g, "-") + "x";
@@ -188,50 +195,71 @@ export default sync.extend({
             if (fieldErrorLength[fieldName] > 1) continue;
 
             var fieldErrorName = this.getFieldErrorName(fieldName);
+            var $field = this.getFieldWithError(fieldName),
+                $errorPlacement = this.errorPlacement(fieldName);
 
-            var field = $(
-                '[name="' +
-                    fieldName +
-                    '"],.as-field[data-field-name="' +
-                    fieldName +
-                    '"]',
-                this.$el
-            );
-
-            if (field.length) {
+            if ($errorPlacement.length) {
                 if (this.isThereAnExistingError(fieldErrorName)) {
                     continue;
                 }
-                this.clearError(fieldErrorName);
-                field
-                    .attr("data-toggle", "popover")
-                    .attr("data-container", "form#" + this.cid)
-                    .attr("data-placement", "bottom")
-                    .attr("data-html", true)
-                    .attr(
-                        "data-content",
-                        '<span class="form-error-' +
-                            fieldErrorName +
-                            '">' +
-                            error[1] +
-                            "</span>"
-                    )
-                    .attr("data-trigger", "manual")
-                    .popover("show");
-                //            $('.form-error-'+error[0]).parents('.popover:first').addClass('danger');
-                $('[class*="form-error-' + fieldErrorName + '"]', this.$el)
-                    .parents(".popover:first")
-                    .addClass("danger");
+                this.clearError(fieldName, error);
+                this.showFieldError(fieldName, error);
             } else {
-                vx.app().ux.toast.add({
-                    msg: error[1] + " (" + fieldName + ")",
-                    color: "danger text-dark font-weight-bold",
-                });
+                this.addFormError(fieldName, error);
             }
         }
 
         this.validateOnSet = true;
         return false;
+    },
+    getFieldWithError(fieldName) {
+        return $(
+            '[name="' +
+                fieldName +
+                '"],.as-field[data-field-name="' +
+                fieldName +
+                '"]',
+            this.$el
+        );
+    },
+    addFormError(fieldName, error) {
+        vx.app().ux.toast.add({
+            msg: error[1] + " (" + fieldName + ")",
+            color: "danger text-dark font-weight-bold",
+        });
+    },
+    showFieldError(fieldName, error) {
+        var fieldErrorName = this.getFieldErrorName(fieldName),
+            $field = this.getFieldWithError(fieldName),
+            $errorPlacement = this.errorPlacement(fieldName);
+
+        $errorPlacement
+            .attr("data-toggle", "popover")
+            .attr("data-container", "form#" + this.cid)
+            .attr("data-placement", "bottom")
+            .attr("data-html", true)
+            .attr(
+                "data-content",
+                '<span class="form-error-' +
+                    fieldErrorName +
+                    '">' +
+                    error[1] +
+                    "</span>"
+            )
+            .attr("data-trigger", "manual")
+            .popover("show");
+        //            $('.form-error-'+error[0]).parents('.popover:first').addClass('danger');
+        $('[class*="form-error-' + fieldErrorName + '"]', this.$el)
+            .parents(".popover:first")
+            .addClass("danger");
+    },
+    errorPlacement(fieldName) {
+        var $field = this.getFieldWithError(fieldName),
+            $errorPlacement = $(
+                `.error-placement[data-field="${fieldName}"]`,
+                this.$el
+            );
+        return $errorPlacement.length ? $errorPlacement : $field;
     },
     removeError(field) {
         delete this.model.errorsMap[field];
@@ -243,19 +271,12 @@ export default sync.extend({
             0
         );
     },
-    clearError(field) {
-        $(
-            '[name="' + field + '"],.as-field[data-field-name="' + field + '"]',
-            this.$el
-        ).length > 0 &&
-            $(
-                '[name="' +
-                    field +
-                    '"],.as-field[data-field-name="' +
-                    field +
-                    '"]',
-                this.$el
-            ).popover("dispose");
+    clearError(fieldName) {
+        // var fieldErrorName = this.getFieldErrorName(fieldName);
+        var $field = this.getFieldWithError(fieldName);
+        if ($field.length > 0) {
+            this.errorPlacement(fieldName).popover("dispose");
+        }
     },
     //    showInfos() {
     //        this.showChildView('infos', new formInfosView({infos: this.infos}));
@@ -271,7 +292,7 @@ export default sync.extend({
         $field = $(":input:first", $container);
 
         if ($field) {
-            !$field.is(':file') ? $field.focus() : $field.click();
+            !$field.is(":file") ? $field.focus() : $field.click();
         }
     },
     setLabelsFilled($form) {
