@@ -25,6 +25,7 @@ export default sync.extend({
         "change textarea": "setValue",
         "change .as-field": "setValue",
         "change :file[data-to]": "sendFileContentTo",
+        "click .view-file": "viewFile",
         "click .clear-field-data[data-field]": "clearFieldData",
         "submit form": "save",
         "click .cancel": "cancel",
@@ -167,6 +168,41 @@ export default sync.extend({
                 }
             }, $el)
         );
+    },
+    viewFileTitle: () => "Visualizar",
+    viewFileClose: () => "Fechar",
+    viewFile(e) {
+        e && vx.events.stopAll(e);
+
+        var $el = $(this.getTarget(e)),
+            fieldName = $el.attr("data-field"),
+            src = this.model.get(fieldName),
+            type = src.match(/data\:(.+);/)[1],
+            templates = {
+                default:
+                    '<embed src="{{src}}" class="w-100" style="height: 40vh;" {{attrs}}>',
+                img: '<img src="{{src}}" style="max-width: 100%; max-height: 40vh;" {{attrs}}>',
+            },
+            html = templates.default,
+            attrs = {},
+            tpl;
+
+        switch (true) {
+            case type == "application/pdf":
+                attrs["pluginspage"] =
+                    "http://www.adobe.com/products/acrobat/readstep2.html";
+                break;
+            case /^image\//.test(type):
+                html = templates.img;
+        }
+
+        tpl = _.template(html);
+
+        vx.ux.popup.info({
+            title: _.result(this, "viewFileTitle"),
+            body: tpl({ src, attrs }),
+            ok: _.result(this, "viewFileClose"),
+        });
     },
     showRequired($form) {
         if (!this.model || !this.model.getMandatoryValidations) return;
