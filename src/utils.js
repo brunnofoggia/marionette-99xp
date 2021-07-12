@@ -213,12 +213,13 @@ obj.viewActions = {
     getBreadcrumbActionsCssClass() {
         return this.breadcrumbActionsCssClass || "";
     },
-    showBreadcrumb() {
-        var text = this.getBreadcrumbText();
+    showBreadcrumb(text) {
+        !text && (text = this.getBreadcrumbText());
         if (this.getBreadcrumbContainer()) {
             return this.showBreadcrumbInside(text);
         }
-        return this.showBreadcrumbOnApp(text);
+
+        if (this !== vx.app().getView()) return this.showBreadcrumbOnApp(text);
     },
     getBreadcrumbContainer() {
         return $(".breadcrumb-container", this.$el).length
@@ -226,11 +227,10 @@ obj.viewActions = {
             : null;
     },
     showBreadcrumbOnApp(text = "") {
-        bbxf.app().getView() === "object" &&
-            "showBreadcrumb" in bbxf.app().getView() &&
-            bbxf.app().getView().showBreadcrumb(text);
+        typeof vx.app().getView() === "object" &&
+            "showBreadcrumb" in vx.app().getView() &&
+            vx.app().getView().showBreadcrumb(text);
     },
-
     showBreadcrumbInside(text = "") {
         var $breadcrumb = this.getBreadcrumbContainer();
         $(".breadcrumb-text", $breadcrumb).remove();
