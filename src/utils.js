@@ -166,15 +166,15 @@ obj.viewActions = {
         if ("actions" in this.regions) {
             return this.showActionsInside(actions);
         }
-        return this.showActionsOnApp(actions);
+        if (this !== vx.app().getView()) return this.showActionsOnApp(actions);
     },
     showActionsOnApp(actions = null) {
         typeof bbxf.app().getView() === "object" &&
-            "setActions" in bbxf.app().getView() &&
+            "showActions" in bbxf.app().getView() &&
             bbxf
                 .app()
                 .getView()
-                .setActions(actions, this.getActionsOptions(actions));
+                .showActions(actions, this.getActionsOptions(actions));
     },
     showActionsInside(actions = null) {
         const ActionBar = bbxf.mnx.views.actionBar;
@@ -188,7 +188,7 @@ obj.viewActions = {
     },
     customizeActionsInside(actions = null) {
         var $actions = $(".actions", this.$el);
-        $actions.addClass("text-right");
+        $actions.addClass("text-center text-lg-right");
         !$actions.parents(".breadcrumb-container:first").length &&
             $actions.addClass("mb-4");
     },
