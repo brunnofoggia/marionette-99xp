@@ -21,7 +21,7 @@
                 {% for(let col of options.cols) if (view.isDisplayed(col)) { var text = ''; %}
                 {% //text = 'val' in col ? col.val(model) : model.get(col.name); %}
                 {% if(!('val' in col)) { text = model.get(col.name); } else { try { text = col.val(model); }catch(e){ text = '-'; } } %}
-                <td data-title="{{col.title}}" class="text-{{'align' in col ? col.align : 'left'}}">{{text ? text : '&nbsp;'}}</td>
+                <td data-title="{{col.title}}" data-name="{{ col.name }}" class="text-{{'align' in col ? col.align : 'left'}}">{{text ? text : '&nbsp;'}}</td>
                 {% } %}
             </tr>
             {% } %}
