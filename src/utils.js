@@ -126,11 +126,11 @@ obj.viewActions = {
 
         this.showActions(l);
     },
-    formatActions() {
+    formatActions(actions) {
         if (!("moduleName" in this)) return []; // view loaded not by routing
 
-        var alias = this.alias,
-            actions = this.getActions();
+        var alias = this.alias;
+        !actions && (actions = this.getActions());
 
         var actionData = this;
 
