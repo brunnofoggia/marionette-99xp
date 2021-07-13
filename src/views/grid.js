@@ -224,9 +224,8 @@ export default mnx.view.extend(
             removeInstructionCssClass: "warning text-color-dark",
             editInstructionCssClass: "warning text-color-dark",
             removeErrorCssClass: "danger font-weight-bold text-light",
-            remove() {
-                var selectedRow =
-                    this.getRegion("list").currentView.getSelectedRow("cid");
+            remove(e) {
+                var selectedRow = this.getSelectedRowAttr(e, "cid");
                 if (!selectedRow) {
                     return this.showRemoveInstruction();
                 }
@@ -300,8 +299,7 @@ export default mnx.view.extend(
                 });
             },
             edit(e) {
-                var selectedRow =
-                    this.getRegion("list").currentView.getSelectedRow("cid");
+                var selectedRow = this.getSelectedRowAttr(e, "cid");
                 if (!selectedRow) {
                     return this.showEditInstruction();
                 }
@@ -314,6 +312,20 @@ export default mnx.view.extend(
                         .replace(/\/pk$/, "/" + selectedModel.id);
 
                 vx.router.navigate(route, { trigger: true });
+            },
+            getSelectedRowAttr(e, attr = "id") {
+                var $el = $(this.getTarget(e)),
+                    $r = $el.parents("tr.item:first"),
+                    cid;
+
+                if (!$r.length) {
+                    cid =
+                        this.getRegion("list").currentView.getSelectedRow(attr);
+                } else {
+                    cid = $r.attr("data-" + attr);
+                }
+
+                return cid;
             },
             showRemoveInstruction() {
                 console.log(_.result(this, "removeInstructionMessage"));
@@ -395,6 +407,9 @@ export default mnx.view.extend(
                     });
 
                 vx.utils.openBlob([html], "text/csv", "export.csv");
+            },
+            getTarget(e) {
+                return e.currentTarget || e.target;
             },
             customize() {},
         }

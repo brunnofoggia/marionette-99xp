@@ -113,8 +113,11 @@ obj.viewActions = {
     getCustomActions() {
         return [];
     },
-    getActions() {
-        return _.union(this.getDefaultActions(), this.getCustomActions());
+    getActions(place = 0) {
+        return _.union(
+            this.getDefaultActions(place),
+            this.getCustomActions(place)
+        );
     },
     setActions() {
         var actions = this.formatActions(),
@@ -166,7 +169,8 @@ obj.viewActions = {
         if ("actions" in this.regions) {
             return this.showActionsInside(actions);
         }
-        if (this !== vx.app().getView()) return this.showActionsOnApp(actions);
+        if (this !== bbxf.app().getView())
+            return this.showActionsOnApp(actions);
     },
     showActionsOnApp(actions = null) {
         typeof bbxf.app().getView() === "object" &&
@@ -185,6 +189,29 @@ obj.viewActions = {
         );
         this.customizeActionsInside(actions);
         $(".actions", this.$el).removeClass("d-none");
+    },
+    renderInlineActions(actions) {
+        const ActionBar = bbxf.mnx.views.actionBar;
+        const actionBar = new ActionBar().setActions(
+            actions,
+            this.getActionsOptions(actions)
+        );
+
+        return actionBar;
+    },
+    showActionsInline(actions, actionsCol) {
+        var o = this.getActionsOptions(actions);
+        !actionsCol && (actionsCol = o.actionsCol);
+
+        var $table = $("table", this.$el),
+            $cols = $('tr td[data-name="' + actionsCol + '"]', $table);
+
+        if (!$cols.length) return;
+        $cols.each((x, col) => {
+            var $col = $(col),
+                actionBar = this.renderInlineActions(actions);
+            $col.html("").append(actionBar.$el);
+        });
     },
     customizeActionsInside(actions = null) {
         var $actions = $(".actions", this.$el);
@@ -218,7 +245,8 @@ obj.viewActions = {
             return this.showBreadcrumbInside(text);
         }
 
-        if (this !== vx.app().getView()) return this.showBreadcrumbOnApp(text);
+        if (this !== bbxf.app().getView())
+            return this.showBreadcrumbOnApp(text);
     },
     getBreadcrumbContainer() {
         return $(".breadcrumb-container", this.$el).length
@@ -226,9 +254,9 @@ obj.viewActions = {
             : null;
     },
     showBreadcrumbOnApp(text = "") {
-        typeof vx.app().getView() === "object" &&
-            "showBreadcrumb" in vx.app().getView() &&
-            vx.app().getView().showBreadcrumb(text);
+        typeof bbxf.app().getView() === "object" &&
+            "showBreadcrumb" in bbxf.app().getView() &&
+            bbxf.app().getView().showBreadcrumb(text);
     },
     showBreadcrumbInside(text = "") {
         var $breadcrumb = this.getBreadcrumbContainer();
