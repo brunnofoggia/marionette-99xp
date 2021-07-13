@@ -188,16 +188,15 @@ obj.viewActions = {
     },
     customizeActionsInside(actions = null) {
         var $actions = $(".actions", this.$el);
-        $actions.addClass("text-center text-lg-right");
+        $actions.addClass("text-right");
         !$actions.parents(".breadcrumb-container:first").length &&
             $actions.addClass("mb-4");
     },
     breadcrumbText: "",
     breadcrumbTag: "h2",
-    breadcrumbCssClass: "col-12 col-md-auto text-center text-md-left",
+    breadcrumbCssClass: "col-12 col-md-auto text-left",
     breadcrumbContainerCssClass: "text-1 text-md-3",
-    breadcrumbActionsCssClass:
-        "col-12 col-lg text-center text-lg-right mt-3 mt-lg-0",
+    breadcrumbActionsCssClass: "col-12 col-lg text-right mt-3 mt-lg-0",
     getBreadcrumbText() {
         return _.result(this, "breadcrumbText") || "";
     },
