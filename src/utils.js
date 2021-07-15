@@ -216,8 +216,8 @@ obj.viewActions = {
     customizeActionsInside(actions = null) {
         var $actions = $(".actions", this.$el);
         $actions.addClass("text-right");
-        !$actions.parents(".breadcrumb-container:first").length &&
-            $actions.addClass("mb-4");
+        // !$actions.parents(".breadcrumb-container:first").length &&
+        //     $actions.addClass("mb-4");
     },
     breadcrumbText: "",
     breadcrumbTag: "h2",
@@ -270,10 +270,7 @@ obj.viewActions = {
         this.customizeBreadcrumbInside(text);
         $breadcrumb.removeClass("d-none");
     },
-    customizeBreadcrumbInside(text = "") {
-        var $breadcrumb = this.getBreadcrumbContainer();
-        $breadcrumb.addClass("mb-4");
-    },
+    customizeBreadcrumbInside(text = "") {},
 };
 
 // loading
