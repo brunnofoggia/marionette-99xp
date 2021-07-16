@@ -225,6 +225,7 @@ export default mnx.view.extend(
             editInstructionCssClass: "warning text-color-dark",
             removeErrorCssClass: "danger font-weight-bold text-light",
             remove(e) {
+                e && vx.events.stopAll(e);
                 var selectedRow = this.getSelectedRowAttr(e, "cid");
                 if (!selectedRow) {
                     return this.showRemoveInstruction();
@@ -299,6 +300,7 @@ export default mnx.view.extend(
                 });
             },
             edit(e) {
+                e && vx.events.stopAll(e);
                 var selectedRow = this.getSelectedRowAttr(e, "cid");
                 if (!selectedRow) {
                     return this.showEditInstruction();
@@ -328,8 +330,6 @@ export default mnx.view.extend(
                 return cid;
             },
             showRemoveInstruction() {
-                console.log(_.result(this, "removeInstructionMessage"));
-
                 vx.app().ux.toast.add({
                     msg: _.result(this, "removeInstructionMessage"),
                     color: this.removeInstructionCssClass,

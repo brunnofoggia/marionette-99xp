@@ -519,6 +519,7 @@ export default sync.extend({
     getActionSave() {
         return {
             ico: "save",
+            type: "submit",
             btnColor: "primary",
             btnCss: "text-light w-100 w-lg-auto",
             title: "Salvar",
