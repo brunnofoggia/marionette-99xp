@@ -520,7 +520,7 @@ export default sync.extend({
         return {
             ico: "save",
             btnColor: "primary",
-            btnCss: "text-light",
+            btnCss: "text-light w-100 w-lg-auto",
             title: "Salvar",
             callback: (e) => this.save(e),
             auth: "{{moduleName}}/{{typeof id !== 'undefined' && id ? 'update' : 'create'}}",
@@ -529,6 +529,7 @@ export default sync.extend({
     getActionBack() {
         return {
             ico: "arrow-left",
+            btnCss: "w-100 w-lg-auto mt-2 mt-lg-0",
             title: "Voltar",
             callback: (e) => this.cancel(e),
         };

@@ -1,6 +1,6 @@
 {% for(let x in options.actions) { let action = options.actions[x]; %}
 {% var cond1 = _.indexOf(['default','danger','warning','success','primary','secondary','info'],action.btnColor)>-1; %}
-{% var btnColor = 'btnColor' in action ? (cond1 ? 'btn-'+action.btnColor : '') : 'btn-light text-dark'; %}
+{% var btnColor = 'btnColor' in action ? (cond1 ? 'btn-'+action.btnColor : '') : 'btn-default text-dark'; %}
 <{{'navigate' in action ? 'a' : 'button' }}
     {{'navigate' in action ? ' href="' +action.navigate+'"' : '' }}
     {{'route' in action ? ' data-route="' +action.route+'"' : '' }}
