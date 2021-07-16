@@ -473,9 +473,11 @@ export default sync.extend({
         }
 
         var urlTpl =
-            saved && this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
+            saved && this.goNextUrl
+                ? _.result(this, "goNextUrl")
+                : this.gobackUrl || "";
 
-        if (urlTpl) {
+        if (urlTpl && urlTpl !== -1) {
             return this.goto(urlTpl);
         } else if (urlTpl !== -1) return Backbone.history.history.back();
     },
@@ -492,8 +494,10 @@ export default sync.extend({
     goNext() {
         this.showSavedInfo();
 
-        var urlTpl = this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
-        if (urlTpl) {
+        var urlTpl = this.goNextUrl
+            ? _.result(this, "goNextUrl")
+            : this.gobackUrl || "";
+        if (urlTpl && urlTpl !== -1) {
             return this.goto(urlTpl);
         } else if (urlTpl !== -1) return Backbone.history.history.back();
     },
