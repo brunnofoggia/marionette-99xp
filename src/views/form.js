@@ -477,8 +477,7 @@ export default sync.extend({
 
         if (urlTpl) {
             return this.goto(urlTpl);
-        }
-        return Backbone.history.history.back();
+        } else if (urlTpl !== -1) return Backbone.history.history.back();
     },
     showSavedInfo() {
         this.savedInfo &&
@@ -496,8 +495,7 @@ export default sync.extend({
         var urlTpl = this.goNextUrl ? this.goNextUrl : this.gobackUrl || "";
         if (urlTpl) {
             return this.goto(urlTpl);
-        }
-        return Backbone.history.history.back();
+        } else if (urlTpl !== -1) return Backbone.history.history.back();
     },
     goto(urlTpl) {
         var url = _.template(urlTpl)({ model: this.model, m: this.model });
