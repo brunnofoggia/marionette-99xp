@@ -63,9 +63,11 @@ export default mnx.view.extend(
                     this.events
                 );
             },
+            norecord: "Nenhum registro encontrado",
             initializePrepareOptions() {
                 this.options.get = () => this.options;
                 this.options.sort = this.collection.setSort(this.options.sort);
+                this.options.norecord = this.norecord;
 
                 this.options.results = () => this.collection.listResults();
                 !("filters" in this.options) && (this.options.filters = {});

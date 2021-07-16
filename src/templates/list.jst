@@ -26,7 +26,7 @@
             </tr>
             {% } %}
         {% } else { %}
-        <tr><td colspan="{{_.size(options.cols)}}" class="text-center">Nenhum registro cadastrado</td></tr>
+        <tr><td colspan="{{_.size(options.cols)}}" class="text-center ignore d-block d-lg-table-cell">{{ options.get().norecord ? _.result(options.get(),'norecord') : 'Nenhum registro cadastrado' }}</td></tr>
         {% } %}
     </tbody>
 </table>
