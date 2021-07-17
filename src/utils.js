@@ -213,12 +213,7 @@ obj.viewActions = {
             $col.html("").append(actionBar.$el);
         });
     },
-    customizeActionsInside(actions = null) {
-        var $actions = $(".actions", this.$el);
-        $actions.addClass("text-right");
-        // !$actions.parents(".breadcrumb-container:first").length &&
-        //     $actions.addClass("mb-4");
-    },
+    customizeActionsInside(actions = null) {},
     breadcrumbText: "",
     breadcrumbTag: "h2",
     breadcrumbCssClass: "col-12 col-md-auto text-left",

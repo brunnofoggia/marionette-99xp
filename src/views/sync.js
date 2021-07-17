@@ -10,6 +10,7 @@ export default mnx.view.extend(
         renderOnState: "ready",
         renderFn: "render",
         render: mnx.view.prototype.renderSync,
+        breadcrumbActionsCssClass: "col-12 col-lg text-left mt-3 mt-lg-0",
         masks: Masks,
         onRender() {
             this.removeWrapper();
